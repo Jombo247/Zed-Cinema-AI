@@ -10,7 +10,7 @@
 body { margin:0; background:#0a0a12; color:white; padding:16px; padding-bottom:40px; }
 .topbar { display:flex; justify-content:space-between; align-items:center; }
 .logo { font-size:22px; font-weight:900; } .logo span { color:#e50914; }
-.topbar a { background:#e50914; color:white; text-decoration:none; padding:10px 16px; border-radius:20px; font-weight:800; font-size:13px; }
+.newBtn { background:#e50914; color:white; border:none; padding:10px 16px; border-radius:20px; font-weight:800; font-size:13px; cursor:pointer; }
 .hero { text-align:center; padding:22px 10px 6px; }
 .hero h1 { font-size:30px; line-height:1.1; margin:0; }
 .hero h1 span { background:linear-gradient(90deg,#e50914,#facc15,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
@@ -49,17 +49,17 @@ video { width:100%; display:block; max-height:260px; }
 </style>
 </head>
 <body>
-<div class="topbar"><div class="logo">🎬 CINEMA<span>AI</span></div><a href="#" onclick="go(0); return false;">+ New Movie</a></div>
+<div class="topbar"><div class="logo">🎬 CINEMA<span>AI</span></div><button type="button" class="newBtn" onclick="newMovie()">+ New Movie</button></div>
 <div class="hero"><h1>Full AI Movie Studio<br><span>Idea → Finished Film</span></h1><p>We make the prompt. You generate in Flow. Upload back. We finish it.</p></div>
 
 <div class="steps" id="stepsBar">
-<button class="stepBtn active" onclick="go(0)">01 💡 Idea</button>
-<button class="stepBtn" onclick="go(1)">02 📜 Script</button>
-<button class="stepBtn" onclick="go(2)">03 🎭 Cast</button>
-<button class="stepBtn" onclick="go(3)">04 🎥 Scene & Shot</button>
-<button class="stepBtn" onclick="go(4)">05 🎬 Prompt + Upload</button>
-<button class="stepBtn" onclick="go(5)">06 🎙️ Voice & Sound</button>
-<button class="stepBtn" onclick="go(6)">07 ✂️ Editing & Export</button>
+<button type="button" class="stepBtn active" onclick="go(0)">01 💡 Idea</button>
+<button type="button" class="stepBtn" onclick="go(1)">02 📜 Script</button>
+<button type="button" class="stepBtn" onclick="go(2)">03 🎭 Cast</button>
+<button type="button" class="stepBtn" onclick="go(3)">04 🎥 Scene & Shot</button>
+<button type="button" class="stepBtn" onclick="go(4)">05 🎬 Prompt + Upload</button>
+<button type="button" class="stepBtn" onclick="go(5)">06 🎙️ Voice & Sound</button>
+<button type="button" class="stepBtn" onclick="go(6)">07 ✂️ Editing & Export</button>
 </div>
 
 <div class="card active" id="card0">
@@ -69,20 +69,20 @@ video { width:100%; display:block; max-height:260px; }
 <div class="chips" id="styles"><div class="chip active" onclick="pick(this,'styles')">🎬 Cinematic</div><div class="chip" onclick="pick(this,'styles')">👻 Horror</div><div class="chip" onclick="pick(this,'styles')">💖 Nollywood Drama</div><div class="chip" onclick="pick(this,'styles')">🤖 Sci-Fi</div><div class="chip" onclick="pick(this,'styles')">🎌 Anime</div></div>
 <label>⏱️ Duration</label>
 <select id="duration"><option>30 sec - Trailer</option><option>60 sec - Scene</option><option>2 min - Short Film</option></select>
-<button class="btn" onclick="makeScript()">Generate Script →</button>
+<button type="button" class="btn" onclick="makeScript()">Generate Script →</button>
 </div>
 
 <div class="card" id="card1">
 <label>📜 Auto Script</label>
 <textarea id="script" rows="6">Press Generate Script from Idea...</textarea>
-<button class="btn" onclick="go(2)">Go To Cast →</button>
+<button type="button" class="btn" onclick="go(2)">Go To Cast →</button>
 </div>
 
 <div class="card" id="card2">
 <label>🎭 Main Character</label><input id="charName" value="Amara - 16, Brave, Lusaka">
 <label>🎭 Villain / Challenge</label><input value="Darkness Spirit - Controls the night">
 <label>📍 Location</label><input value="Lusaka Village, Market, Forest">
-<button class="btn" onclick="go(3)">Continue To Shot Design →</button>
+<button type="button" class="btn" onclick="go(3)">Continue To Shot Design →</button>
 </div>
 
 <div class="card" id="card3">
@@ -91,7 +91,7 @@ video { width:100%; display:block; max-height:260px; }
 <label>📍 Location Filter</label>
 <div class="chips" id="locFilter"><div class="chip active" onclick="filterShots('all',this)">All Locations</div><div class="chip" onclick="filterShots('Lusaka',this)">Lusaka</div><div class="chip" onclick="filterShots('Forest',this)">Forest</div><div class="chip" onclick="filterShots('Village',this)">Village</div></div>
 <div id="shots"></div>
-<button class="btn" onclick="go(4)">Make Prompt + Upload Video →</button>
+<button type="button" class="btn" onclick="go(4)">Make Prompt + Upload Video →</button>
 </div>
 
 <div class="card" id="card4">
@@ -101,12 +101,12 @@ video { width:100%; display:block; max-height:260px; }
 <div class="chips" id="refs"><div class="chip active" onclick="pick(this,'refs')">🖼️ Use Movie Poster</div><div class="chip" onclick="pick(this,'refs')">📸 My Photo</div><div class="chip" onclick="pick(this,'refs')">🎨 No Reference</div></div>
 <label>🎥 Motion Strength</label>
 <select id="motion"><option>Low - Slow Cinematic</option><option selected>Medium - Natural</option><option>High - Action / Fast</option></select>
-<button class="btn" id="genBtn" onclick="generateVideo()">✨ Generate Perfect Prompt For Flow →</button>
+<button type="button" class="btn" id="genBtn" onclick="generateVideo()">✨ Generate Perfect Prompt For Flow →</button>
 <div class="status" id="vStatus"></div>
 <div id="videoResult" style="display:none; margin-top:14px;">
 <label>📋 Your Perfect Prompt - Copy This</label>
 <textarea id="proPromptText" rows="5" style="background:#000; border:1px solid #facc15;"></textarea>
-<button class="btn yellow" onclick="copyPrompt()">📋 Copy Prompt</button>
+<button type="button" class="btn yellow" onclick="copyPrompt()">📋 Copy Prompt</button>
 <div style="display:flex; gap:8px; margin-top:12px;">
 <a href="https://labs.google/fx/tools/flow" target="_blank" class="flowBtn" style="background:white; color:black;">▶️ Open Google Flow</a>
 <a href="https://klingai.com" target="_blank" class="flowBtn" style="background:#222; color:white; border:1px solid #444;">Open Kling</a>
@@ -118,7 +118,7 @@ video { width:100%; display:block; max-height:260px; }
 <p id="uploadedName" style="font-size:12px; color:#22c55e; text-align:center;"></p>
 <div class="videoBox"><video id="mainVideo" controls poster="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800"></video></div>
 <p style="font-size:12px; color:#888; text-align:center;">Your video stays on your phone - not sent to any server.</p>
-<button class="btn dark" onclick="go(5)">Add Voice & Sound →</button>
+<button type="button" class="btn dark" onclick="go(5)">Add Voice & Sound →</button>
 </div>
 </div>
 
@@ -135,8 +135,8 @@ video { width:100%; display:block; max-height:260px; }
 <div class="chips" id="sfx"><div class="chip active" onclick="pick(this,'sfx')">🦁 Lion Roar</div><div class="chip" onclick="pick(this,'sfx')">⚡ Thunder</div><div class="chip" onclick="pick(this,'sfx')">👣 Footsteps</div><div class="chip" onclick="pick(this,'sfx')">🔥 Fire</div></div>
 <label>🎤 Dialogue Line - Amara</label>
 <input id="dialogue" value="I am not afraid of the darkness. I am the light of my village!">
-<button class="btn" onclick="alert('🔊 Playing: ' + document.getElementById('dialogue').value + ' | Music: ' + document.querySelector('#music .active').textContent)">▶️ Preview Voice + Sound</button>
-<button class="btn dark" onclick="go(6)">Go To Editing →</button>
+<button type="button" class="btn" onclick="alert('🔊 Playing: ' + document.getElementById('dialogue').value + ' | Music: ' + document.querySelector('#music .active').textContent)">▶️ Preview Voice + Sound</button>
+<button type="button" class="btn dark" onclick="go(6)">Go To Editing →</button>
 </div>
 
 <div class="card" id="card6">
@@ -156,8 +156,8 @@ video { width:100%; display:block; max-height:260px; }
 <div class="toggle"><span>🎵 Auto Music Sync</span><input type="checkbox" checked></div>
 <div class="toggle"><span>📱 Auto Reformat for TikTok</span><input type="checkbox"></div>
 <div class="preview" id="finalPreview"><h3 id="finalTitle">THE LION OF LUSAKA</h3><p id="finalMeta">Cinematic • Teal Grade • Fade • English Subs • 30 sec</p><span class="badge">✅ READY TO EXPORT</span></div>
-<button class="btn green" onclick="exportMovie()">⬇️ Export Final Movie - MP4</button>
-<button class="btn dark" onclick="alert('🔗 Share link copied!')">🔗 Copy Share Link</button>
+<button type="button" class="btn green" onclick="exportMovie()">⬇️ Export Final Movie - MP4</button>
+<button type="button" class="btn dark" onclick="alert('🔗 Share link copied!')">🔗 Copy Share Link</button>
 </div>
 
 <p style="text-align:center; color:#666; font-size:12px; margin-top:20px;">CINEMA AI • Made in Zambia • Idea → Finished Film</p>
@@ -170,12 +170,26 @@ let allShots = [
 { n:4, title:"Finale - Light Wins", loc:"Village", cam:"Hero Low Angle + Crane Up", light:"Bright Epic - Sun Breaks Through", action:"Amara + Lion stand together. Light explodes. Village saved. Everyone cheers.", dur:"26-30s" },
 ];
 function go(i){
-  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.stepBtn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('card'+i).classList.add('active');
-  let btns = document.querySelectorAll('.stepBtn');
-  if(btns[i]){ btns[i].classList.add('active'); btns[i].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }
-  window.scrollTo({top:0, behavior:'smooth'});
+  var cards = document.querySelectorAll('.card');
+  var btns = document.querySelectorAll('.stepBtn');
+  cards.forEach(function(c){ c.classList.remove('active'); });
+  btns.forEach(function(b){ b.classList.remove('active'); });
+  if(cards[i]) cards[i].classList.add('active');
+  if(btns[i]){ btns[i].classList.add('active'); try{ btns[i].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }catch(e){} }
+  window.scrollTo(0,0);
+}
+function newMovie(){
+  // Clear old movie and go to Idea
+  var p = document.getElementById('prompt');
+  if(p) p.value = "";
+  var s = document.getElementById('script');
+  if(s) s.value = "";
+  var vr = document.getElementById('videoResult');
+  if(vr) vr.style.display = 'none';
+  var vs = document.getElementById('vStatus');
+  if(vs) vs.textContent = "";
+  if(confirm('Start a NEW movie? Your current idea will be cleared.')){ go(0); }
+  else { go(0); }
 }
 function pick(el,g){ document.querySelectorAll('#'+g+' .chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
 function makeScript(){
