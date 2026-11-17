@@ -1,26 +1,128 @@
 
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CINEMA AI - Login</title>
-<style>*{box-sizing:border-box;font-family:Arial}body{margin:0;background:#0a0a12;color:#fff;padding:20px}input{width:100%;background:#16161f;border:1px solid #333;color:#fff;padding:14px;border-radius:12px;margin:8px 0}button{width:100%;background:#e50914;color:#fff;border:none;padding:16px;border-radius:14px;font-weight:900;font-size:16px;margin-top:10px;cursor:pointer}.card{background:#16161f;border:1px solid #2a2a3a;border-radius:20px;padding:20px;max-width:460px;margin:20px auto}.tab{display:flex;gap:8px}.tab button{background:#222;border:1px solid #444}.tab button.active{background:#e50914}</style></head>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cinema - Stage 6 Editor</title>
+<style>
+body{background:#0a0a0a;color:#fff;font-family:Arial;padding:12px}
+h2{font-size:16px} h3{font-size:13px;color:#aaa}
+#preview{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+#preview video{width:100%;height:100%;object-fit:cover}
+#previewText{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-weight:900;font-size:22px;text-shadow:2px 2px 0 #000}
+.slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
+.slot{background:#1a1a1a;border:2px dashed #333;border-radius:10px;padding:10px;min-height:78px;cursor:pointer}
+.slot.active{border-color:#ffcc00;background:#2a2200}
+.slot.filled{border-style:solid;border-color:#00d26a}
+.slot small{color:#aaa;display:block;font-size:11px}
+.slot b{font-size:12px}
+.clip{background:#222;border-radius:8px;padding:8px;cursor:pointer;border:1px solid #333}
+.clip img{width:100%;border-radius:6px}
+.toolbar{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
+.toolbar button{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;white-space:nowrap}
+#timeline{background:#111;border-radius:10px;padding:10px;display:flex;gap:6px;overflow-x:auto}
+.timeline-clip{background:#333;padding:10px 12px;border-radius:8px;font-size:12px;white-space:nowrap}
+.timeline-clip.active{background:#ffcc00;color:#000}
+input[type=file]{margin:8px 0}
+</style>
+</head>
 <body>
-<div class="card">
-<h1 style="text-align:center;">🎬 CINEMA <span style="color:#e50914;">AI</span></h1><p style="text-align:center;color:#aaa;font-size:13px;">Real Account - Saved in Firebase Cloud</p>
-<div class="tab"><button id="tL" class="active" onclick="show('login')">Login</button><button id="tR" onclick="show('reg')">Register</button></div>
-<div id="loginBox"><input id="lEmail" placeholder="Email"><input id="lPass" type="password" placeholder="Password"><button onclick="login()">Login →</button><p onclick="forgot()" style="text-align:center;color:#facc15;font-size:13px;cursor:pointer;margin-top:12px;">Forgot Password? Tap here to reset</p><p onclick="togglePass()" style="text-align:center;color:#aaa;font-size:12px;cursor:pointer;">👁️ Show / Hide Password</p></div>
-<div id="regBox" style="display:none;"><input id="rName" placeholder="Full Name"><input id="rEmail" placeholder="Email"><input id="rPass" type="password" placeholder="Password (6+ chars)"><button style="background:#22c55e;" onclick="register()">Create Account →</button></div>
-<p id="msg" style="color:#facc15;text-align:center;font-size:13px;"></p>
+
+<h2>🎬 CINEMA - STAGE 6: EDITING</h2>
+<h3>Zed Gambit - Drag clips into slots</h3>
+
+<div id="preview">
+  <span id="previewPlaceholder">Tap a Slot, Then Tap a Clip Below</span>
+  <video id="video" controls style="display:none"></video>
+  <div id="previewText"></div>
 </div>
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyCHODLKOz22vDUwX99S2wEYZKfKTndhlaM",authDomain:"cinema-ai-cef5d.firebaseapp.com",projectId:"cinema-ai-cef5d",storageBucket:"cinema-ai-cef5d.firebasestorage.app",messagingSenderId:"457585448912",appId:"1:457585448912:web:60b0e688f12b9f500fcbd5",measurementId:"G-YG06VQNE65"};
-const app=initializeApp(firebaseConfig); const auth=getAuth(app); const db=getFirestore(app);
-window.show=(t)=>{document.getElementById('loginBox').style.display=t=='login'?'block':'none';document.getElementById('regBox').style.display=t=='reg'?'block':'none';document.getElementById('tL').classList.toggle('active',t=='login');document.getElementById('tR').classList.toggle('active',t=='reg');}
-window.togglePass=()=>{ const p=document.getElementById('lPass'); p.type=p.type==='password'?'text':'password'; }
-window.forgot=async()=>{ const email=document.getElementById('lEmail').value; if(!email) return alert('Type your email first in the Email box, then tap Forgot Password'); try{ await sendPasswordResetEmail(auth, email); alert('✅ Check your email! We sent a reset link to '+email); }catch(e){ alert('❌ '+e.message); } }
-window.register=async()=>{try{const name=document.getElementById('rName').value;const email=document.getElementById('rEmail').value;const pass=document.getElementById('rPass').value;const cred=await createUserWithEmailAndPassword(auth,email,pass);await setDoc(doc(db,"users",cred.user.uid),{name:name,email:email,role:"user",createdAt:new Date().toISOString()});document.getElementById('msg').textContent="✅ Account created! Logging in...";setTimeout(()=>location.href="studio.html",800);}catch(e){document.getElementById('msg').textContent="❌ "+e.message;}}
-window.login=async()=>{try{const email=document.getElementById('lEmail').value;const pass=document.getElementById('lPass').value;const cred=await signInWithEmailAndPassword(auth,email,pass);const snap=await getDoc(doc(db,"users",cred.user.uid));const data=snap.data();if(data && data.role==="admin"){location.href="admin.html";}else{location.href="studio.html";}}catch(e){document.getElementById('msg').textContent="❌ "+e.message;}}
-</script></body></html>
+
+<div class="toolbar">
+  <button onclick="splitClip()">✂️ Split</button>
+  <button onclick="addText()">🔤 Add Text</button>
+  <button onclick="setFilter('grayscale(1)')">⬛ B&W Filter</button>
+  <button onclick="setFilter('sepia(0.6)')">🎞️ Vintage</button>
+  <button onclick="setFilter('none')">✨ Clear Filter</button>
+  <button onclick="setSpeed(0.5)">0.5x</button>
+  <button onclick="setSpeed(1)">1x</button>
+  <button onclick="setSpeed(2)">2x</button>
+  <button onclick="exportMovie()">⬆️ Export</button>
+</div>
+
+<h3>SCENE SLOTS - Your Story Order</h3>
+<div class="slots" id="slots"></div>
+
+<h3>TIMELINE - Fine Edit</h3>
+<div id="timeline"></div>
+
+<h3>YOUR CLIPS - From Stage 4 / 5</h3>
+<input type="file" accept="video/*" multiple onchange="uploadClips(event)">
+<div class="slots" id="library"></div>
+
+<script>
+const slotNames = [
+  "1. INTRO - Themba in Lusaka",
+  "2. FIRST GAME - Loses",
+  "3. TRAINING MONTAGE",
+  "4. FINAL - Zed Gambit Cup",
+  "5. WIN - Checkmate",
+  "6. END CARD - Logo"
+];
+let slots = Array(6).fill(null);
+let clips = [
+  {name:"Themba in Market", url:"", thumb:"https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=300"},
+  {name:"Chess Move", url:"", thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300"},
+  {name:"Training", url:"", thumb:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300"},
+  {name:"Tournament Crowd", url:"", thumb:"https://images.unsplash.com/photo-1511882150382-421056c89033?w=300"},
+];
+let selectedSlot = 0;
+let videoEl = document.getElementById('video');
+
+function render(){
+  document.getElementById('slots').innerHTML = slotNames.map((n,i)=>`
+    <div class="slot ${selectedSlot===i?'active':''} ${slots[i]?'filled':''}" onclick="selectSlot(${i})">
+      <small>${n}</small>
+      <b>${slots[i]?slots[i].name:'+ Empty - Tap to Fill'}</b>
+    </div>`).join('');
+  document.getElementById('library').innerHTML = clips.map((c,i)=>`
+    <div class="clip" onclick="placeClip(${i})">
+      <img src="${c.thumb}"><b>${c.name}</b><small>Tap to place in Slot ${selectedSlot+1}</small>
+    </div>`).join('');
+  document.getElementById('timeline').innerHTML = slots.map((s,i)=>`
+    <div class="timeline-clip ${selectedSlot===i?'active':''}" onclick="selectSlot(${i})">
+      ${s? '▶ '+s.name : '○ Empty Slot '+(i+1)}
+    </div>`).join('');
+}
+function selectSlot(i){ selectedSlot=i; render(); showPreview(); }
+function placeClip(i){
+  slots[selectedSlot]=clips[i];
+  render(); showPreview();
+  if(selectedSlot<5) selectedSlot++;
+  render();
+}
+function showPreview(){
+  let c = slots[selectedSlot];
+  if(c && c.url){ videoEl.style.display='block'; videoEl.src=c.url; videoEl.play(); document.getElementById('previewPlaceholder').style.display='none'; }
+  else if(c){ document.getElementById('previewPlaceholder').innerText='Preview: '+c.name+' - (Demo clip, upload real video to play)'; }
+}
+function uploadClips(e){
+  [...e.target.files].forEach(f=>{
+    let url = URL.createObjectURL(f);
+    clips.push({name:f.name, url:url, thumb:'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300'});
+  });
+  render();
+}
+function splitClip(){ alert('Split: Slot '+(selectedSlot+1)+' will be cut into 2 clips at current playhead. In full version this creates Slot '+(selectedSlot+1)+'A + B'); }
+function addText(){ let t = prompt('Text for this scene?','Checkmate. Zed Gambit!'); if(t) document.getElementById('previewText').innerText=t; }
+function setFilter(f){ videoEl.style.filter=f; }
+function setSpeed(s){ videoEl.playbackRate=s; alert('Speed: '+s+'x'); }
+function exportMovie(){
+  let filled = slots.filter(s=>s).length;
+  alert('Exporting '+filled+'/6 slots...\n16:9 for YouTube + 9:16 for TikTok will be created.\nNext: Go to Stage 7 for Poster + Trailer');
+}
+render();
+</script>
+</body>
+</html>
 
 
