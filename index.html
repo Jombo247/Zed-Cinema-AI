@@ -27,7 +27,7 @@ textarea { min-height:80px; }
 .chip { background:#22222f; border:1px solid #333; color:#ddd; padding:9px 13px; border-radius:20px; font-size:13px; cursor:pointer; }
 .chip.active { background:#e50914; border-color:#e50914; color:white; font-weight:800; }
 .btn { width:100%; background:#e50914; color:white; border:none; padding:16px; border-radius:14px; font-size:16px; font-weight:900; margin-top:16px; cursor:pointer; }
-.btn.green { background:#22c55e; } .btn.dark { background:#222; border:1px solid #444; }
+.btn.green { background:#22c55e; } .btn.dark { background:#222; border:1px solid #444; } .btn.yellow { background:#facc15; color:black; }
 .shot { background:#0a0a12; border:1px solid #333; border-radius:14px; padding:12px; margin-top:10px; }
 .shot b { font-size:14px; } .shot p { margin:6px 0 0; color:#aaa; font-size:13px; line-height:1.5; }
 .shot span { display:inline-block; background:#222; padding:4px 8px; border-radius:10px; font-size:11px; margin:6px 4px 0 0; color:#ddd; }
@@ -47,18 +47,19 @@ video { width:100%; display:block; max-height:260px; }
 .preview { background:#000; border-radius:14px; padding:16px; margin-top:12px; text-align:center; }
 .preview h3 { margin:0; } .preview p { color:#aaa; font-size:13px; }
 .badge { display:inline-block; background:#22c55e; color:white; padding:5px 10px; border-radius:20px; font-size:11px; font-weight:800; margin-top:8px; }
+.flowBtn { flex:1; text-align:center; padding:12px; border-radius:12px; font-weight:800; text-decoration:none; font-size:13px; }
 </style>
 </head>
 <body>
 <div class="topbar"><div class="logo">🎬 CINEMA<span>AI</span></div><a href="#" onclick="go(5)">+ New Movie</a></div>
-<div class="hero"><h1>Full AI Movie Studio<br><span>Idea → Finished Film</span></h1><p>Write it. Shoot it. Voice it. Edit it. Export it. All in one place.</p></div>
+<div class="hero"><h1>Full AI Movie Studio<br><span>Idea → Finished Film</span></h1><p>We make the prompt. You generate in Flow. Upload back. We finish it.</p></div>
 
 <div class="steps">
 <button class="stepBtn active" onclick="go(0)">01 💡 Idea</button>
 <button class="stepBtn" onclick="go(1)">02 📜 Script</button>
 <button class="stepBtn" onclick="go(2)">03 🎭 Cast</button>
 <button class="stepBtn" onclick="go(3)">04 🎥 Scene & Shot</button>
-<button class="stepBtn" onclick="go(4)">05 🎬 AI Video</button>
+<button class="stepBtn" onclick="go(4)">05 🎬 Prompt + Upload</button>
 <button class="stepBtn" onclick="go(5)">06 🎙️ Voice & Sound</button>
 <button class="stepBtn" onclick="go(6)">07 ✂️ Editing & Export</button>
 </div>
@@ -92,22 +93,33 @@ video { width:100%; display:block; max-height:260px; }
 <label>📍 Location Filter</label>
 <div class="chips" id="locFilter"><div class="chip active" onclick="filterShots('all',this)">All Locations</div><div class="chip" onclick="filterShots('Lusaka',this)">Lusaka</div><div class="chip" onclick="filterShots('Forest',this)">Forest</div><div class="chip" onclick="filterShots('Village',this)">Village</div></div>
 <div id="shots"></div>
-<button class="btn" onclick="go(4)">Generate Moving Footage →</button>
+<button class="btn" onclick="go(4)">Make Prompt + Upload Video →</button>
 </div>
 
 <div class="card" id="card4">
-<h3 style="margin:0">05 🎬 AI Video Generation</h3>
-<p style="color:#aaa; font-size:13px;">Generate actual moving footage from prompts + references.</p>
-<label>Reference Image / Style</label>
-<div class="chips" id="refs"><div class="chip active" onclick="pick(this,'refs')">🖼️ Use Movie Poster</div><div class="chip" onclick="pick(this,'refs')">📸 Upload My Photo</div><div class="chip" onclick="pick(this,'refs')">🎨 No Reference</div></div>
+<h3 style="margin:0">05 🎬 Prompt + Upload Video</h3>
+<p style="color:#aaa; font-size:13px;">1. We make perfect prompt → 2. You generate in Flow / Kling / PixVerse → 3. You upload MP4 back here. No API, never stuck.</p>
+<label>Reference / Style</label>
+<div class="chips" id="refs"><div class="chip active" onclick="pick(this,'refs')">🖼️ Use Movie Poster</div><div class="chip" onclick="pick(this,'refs')">📸 My Photo</div><div class="chip" onclick="pick(this,'refs')">🎨 No Reference</div></div>
 <label>🎥 Motion Strength</label>
 <select id="motion"><option>Low - Slow Cinematic</option><option selected>Medium - Natural</option><option>High - Action / Fast</option></select>
-<button class="btn" id="genBtn" onclick="generateVideo()">✨ Generate Moving Footage</button>
-<div class="bar" style="display:none" id="barWrap"><div class="fill" id="fill"></div></div>
+<button class="btn" id="genBtn" onclick="generateVideo()">✨ Generate Perfect Prompt For Flow →</button>
 <div class="status" id="vStatus"></div>
-<div id="videoResult" style="display:none">
-<div class="videoBox"><video id="mainVideo" controls poster="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800"><source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4"></video></div>
-<p style="font-size:12px; color:#888; text-align:center;">Preview footage - Connect Runway / Kling / Pika API for real AI generation from your prompt.</p>
+<div id="videoResult" style="display:none; margin-top:14px;">
+<label>📋 Your Perfect Prompt - Copy This</label>
+<textarea id="proPromptText" rows="5" style="background:#000; border:1px solid #facc15;"></textarea>
+<button class="btn yellow" onclick="copyPrompt()">📋 Copy Prompt</button>
+<div style="display:flex; gap:8px; margin-top:12px;">
+<a href="https://labs.google/fx/tools/flow" target="_blank" class="flowBtn" style="background:white; color:black;">▶️ Open Google Flow</a>
+<a href="https://klingai.com" target="_blank" class="flowBtn" style="background:#222; color:white; border:1px solid #444;">Open Kling</a>
+<a href="https://pixverse.ai" target="_blank" class="flowBtn" style="background:#222; color:white; border:1px solid #444;">Open PixVerse</a>
+</div>
+<p style="font-size:12px; color:#aaa; text-align:center;">Paste prompt in Flow → Generate → Download MP4 → Upload it back below</p>
+<label>📤 2. Upload Your Generated Video From Flow / Kling</label>
+<input type="file" accept="video/*" onchange="handleUpload(this)" style="background:#000; padding:16px;">
+<p id="uploadedName" style="font-size:12px; color:#22c55e; text-align:center;"></p>
+<div class="videoBox"><video id="mainVideo" controls poster="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800"></video></div>
+<p style="font-size:12px; color:#888; text-align:center;">Your video stays on your phone - not sent to any server.</p>
 <button class="btn dark" onclick="go(5)">Add Voice & Sound →</button>
 </div>
 </div>
@@ -184,17 +196,30 @@ function filterShots(f, el){
   document.querySelectorAll('#locFilter .chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
   renderShots(f);
 }
+// === PROMPT + UPLOAD MODE - NO API ===
 function generateVideo(){
-  let btn = document.getElementById('genBtn'); btn.disabled=true; btn.textContent='🎬 Rendering...';
-  document.getElementById('barWrap').style.display='block';
-  let steps = ['Reading shot list...','Generating Scene 1...','Generating Scene 2...','Generating Scene 3...','Generating Scene 4...','Adding motion...','Upscaling to 4K...'];
-  let i=0;
-  let int = setInterval(()=>{
-    if(i>=steps.length){ clearInterval(int); document.getElementById('videoResult').style.display='block'; document.getElementById('barWrap').style.display='none'; btn.disabled=false; btn.textContent='✨ Regenerate Footage'; document.getElementById('mainVideo').play(); return; }
-    document.getElementById('vStatus').textContent = steps[i];
-    document.getElementById('fill').style.width = ((i+1)/steps.length*100)+'%';
-    i++;
-  }, 900);
+  let prompt = document.getElementById('prompt').value.trim();
+  let style = document.querySelector('#styles .active') ? document.querySelector('#styles .active').textContent : 'Cinematic';
+  let motion = document.getElementById('motion').value;
+  let proPrompt = "Cinematic AI movie scene, " + style + " style, " + motion + " motion. " + prompt + " Camera: cinematic, slow push-in, dramatic lighting, 4K, realistic, film grain, epic. Duration: 8 seconds. No text, no watermark.";
+  document.getElementById('proPromptText').value = proPrompt;
+  document.getElementById('videoResult').style.display = 'block';
+  document.getElementById('vStatus').textContent = '✅ Perfect prompt ready! Copy it, generate in Flow, then upload back here.';
+  document.getElementById('videoResult').scrollIntoView({behavior:'smooth'});
+}
+function copyPrompt(){
+  let t = document.getElementById('proPromptText');
+  t.select(); document.execCommand('copy');
+  alert('✅ Prompt copied! Now paste it in Google Flow / Kling / PixVerse');
+}
+function handleUpload(input){
+  let file = input.files[0];
+  if(!file) return;
+  let url = URL.createObjectURL(file);
+  let vid = document.getElementById('mainVideo');
+  vid.src = url; vid.play();
+  document.getElementById('vStatus').textContent = '✅ Your video uploaded! ' + file.name + ' - Now continue to Voice & Sound.';
+  document.getElementById('uploadedName').textContent = '📹 Uploaded: ' + file.name;
 }
 function selectClip(el, idx){
   document.querySelectorAll('.clip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
