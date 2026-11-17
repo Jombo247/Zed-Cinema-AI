@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cinema - Stage 6 Editor</title>
 <style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;padding:12px}
-h2{font-size:16px} h3{font-size:13px;color:#aaa}
-#preview{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+body{background:#0a0a0a;color:#fff;font-family:Arial;padding:12px;margin:0}
+h2{font-size:16px;margin:8px 0} h3{font-size:13px;color:#aaa;margin:14px 0 6px}
+#preview{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:2px solid #222}
 #preview video{width:100%;height:100%;object-fit:cover}
 #previewText{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-weight:900;font-size:22px;text-shadow:2px 2px 0 #000}
 .slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
-.slot{background:#1a1a1a;border:2px dashed #333;border-radius:10px;padding:10px;min-height:78px;cursor:pointer}
+.slot{background:#1a1a1a;border:2px dashed #333;border-radius:10px;padding:10px;min-height:78px;cursor:pointer;transition:0.2s}
+.slot:hover{transform:scale(1.03)}
 .slot.active{border-color:#ffcc00;background:#2a2200}
 .slot.filled{border-style:solid;border-color:#00d26a}
 .slot small{color:#aaa;display:block;font-size:11px}
@@ -19,11 +20,14 @@ h2{font-size:16px} h3{font-size:13px;color:#aaa}
 .clip{background:#222;border-radius:8px;padding:8px;cursor:pointer;border:1px solid #333}
 .clip img{width:100%;border-radius:6px}
 .toolbar{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
-.toolbar button{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;white-space:nowrap}
-#timeline{background:#111;border-radius:10px;padding:10px;display:flex;gap:6px;overflow-x:auto}
-.timeline-clip{background:#333;padding:10px 12px;border-radius:8px;font-size:12px;white-space:nowrap}
+.toolbar button{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;white-space:nowrap;cursor:pointer}
+#timeline{background:#111;border-radius:10px;padding:14px;display:flex;gap:6px;overflow-x:auto}
+.timeline-clip{background:#333;padding:10px 12px;border-radius:8px;font-size:12px;white-space:nowrap;cursor:grab}
 .timeline-clip.active{background:#ffcc00;color:#000}
 input[type=file]{margin:8px 0}
+.audioBox{background:#111;padding:12px;border-radius:10px}
+.audioBox p{font-size:12px;margin:8px 0}
+.audioBox audio{width:100%;margin:4px 0}
 </style>
 </head>
 <body>
@@ -40,20 +44,45 @@ input[type=file]{margin:8px 0}
 <div class="toolbar">
   <button onclick="splitClip()">✂️ Split</button>
   <button onclick="addText()">🔤 Add Text</button>
-  <button onclick="setFilter('grayscale(1)')">⬛ B&W Filter</button>
+  <button onclick="setFilter('grayscale(1)')">⬛ B&W</button>
   <button onclick="setFilter('sepia(0.6)')">🎞️ Vintage</button>
-  <button onclick="setFilter('none')">✨ Clear Filter</button>
+  <button onclick="setFilter('none')">✨ Clear</button>
   <button onclick="setSpeed(0.5)">0.5x</button>
   <button onclick="setSpeed(1)">1x</button>
   <button onclick="setSpeed(2)">2x</button>
+  <button onclick="undo()">↩️ Undo</button>
+  <button onclick="clearSlot()">🗑️ Clear Slot</button>
   <button onclick="exportMovie()">⬆️ Export</button>
 </div>
 
 <h3>SCENE SLOTS - Your Story Order</h3>
+<div id="progressBar" style="background:#222;height:10px;border-radius:10px;overflow:hidden;margin:8px 0"><div id="progressFill" style="background:#00d26a;height:100%;width:0%"></div></div>
+<p id="progressText" style="font-size:12px;color:#aaa">0/6 slots filled</p>
 <div class="slots" id="slots"></div>
 
 <h3>TIMELINE - Fine Edit</h3>
 <div id="timeline"></div>
+<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+  <button onclick="alert('Timeline zoom - in full version this makes clips bigger / smaller')" style="background:#222;color:#fff;border:1px solid #444;padding:8px 12px;border-radius:20px">🔍 Zoom In</button>
+  <button onclick="alert('Timeline zoom out')" style="background:#222;color:#fff;border:1px solid #444;padding:8px 12px;border-radius:20px">🔎 Zoom Out</button>
+  <span id="durationLabel" style="font-size:12px;color:#aaa;padding-top:8px">Total: 6 slots = ~45 sec movie</span>
+</div>
+
+<h3>TRANSITIONS - Between Slots</h3>
+<div class="toolbar">
+  <button onclick="setTransition('Hard Cut')">⚡ Hard Cut</button>
+  <button onclick="setTransition('Crossfade')">🌅 Crossfade</button>
+  <button onclick="setTransition('Zoom')">🔍 Zoom - For Checkmate</button>
+</div>
+<p id="transitionLabel" style="font-size:12px;color:#ffcc00">Current: Hard Cut</p>
+
+<h3>🎵 AUDIO TRACKS - Stage 6</h3>
+<div class="audioBox">
+  <p>🎵 Music Track: <input type="file" accept="audio/*" onchange="playAudio(this,'music')"> <button onclick="setVolume('music',0.2)">Low - Under Dialogue</button></p>
+  <audio id="musicAudio" controls></audio>
+  <p>🎤 Dialogue / Voiceover: <input type="file" accept="audio/*" onchange="playAudio(this,'voice')"> <button onclick="setVolume('voice',1)">Full Volume</button></p>
+  <audio id="voiceAudio" controls></audio>
+</div>
 
 <h3>YOUR CLIPS - From Stage 4 / 5</h3>
 <input type="file" accept="video/*" multiple onchange="uploadClips(event)">
@@ -77,6 +106,19 @@ let clips = [
 ];
 let selectedSlot = 0;
 let videoEl = document.getElementById('video');
+let history = [];
+let currentTransition = 'Hard Cut';
+
+function autoSave(){ localStorage.setItem('cinema_zedgambit_slots', JSON.stringify(slots.map(s=>s?s.name:null))); }
+function loadSave(){
+  let saved = JSON.parse(localStorage.getItem('cinema_zedgambit_slots')||'[]');
+  saved.forEach((name,i)=>{
+    if(name){ let found = clips.find(c=>c.name===name); if(found) slots[i]=found; }
+  });
+}
+function saveHistory(){ history.push([...slots]); if(history.length>20) history.shift(); }
+function undo(){ if(history.length){ slots = history.pop(); render(); autoSave(); } }
+function clearSlot(){ saveHistory(); slots[selectedSlot]=null; render(); autoSave(); }
 
 function render(){
   document.getElementById('slots').innerHTML = slotNames.map((n,i)=>`
@@ -86,17 +128,23 @@ function render(){
     </div>`).join('');
   document.getElementById('library').innerHTML = clips.map((c,i)=>`
     <div class="clip" onclick="placeClip(${i})">
-      <img src="${c.thumb}"><b>${c.name}</b><small>Tap to place in Slot ${selectedSlot+1}</small>
+      <img src="${c.thumb}"><b>${c.name}</b><small>Tap to place in Slot ${selectedSlot+1} or Drag</small>
     </div>`).join('');
   document.getElementById('timeline').innerHTML = slots.map((s,i)=>`
     <div class="timeline-clip ${selectedSlot===i?'active':''}" onclick="selectSlot(${i})">
       ${s? '▶ '+s.name : '○ Empty Slot '+(i+1)}
     </div>`).join('');
+  let filled = slots.filter(s=>s).length;
+  document.getElementById('progressFill').style.width = (filled/6*100)+'%';
+  document.getElementById('progressText').innerText = filled+'/6 slots filled - '+(6-filled)+' left';
+  document.getElementById('durationLabel').innerText = 'Total: '+filled+' slots filled';
+  enableDrag();
 }
 function selectSlot(i){ selectedSlot=i; render(); showPreview(); }
 function placeClip(i){
+  saveHistory();
   slots[selectedSlot]=clips[i];
-  render(); showPreview();
+  render(); showPreview(); autoSave();
   if(selectedSlot<5) selectedSlot++;
   render();
 }
@@ -112,14 +160,39 @@ function uploadClips(e){
   });
   render();
 }
-function splitClip(){ alert('Split: Slot '+(selectedSlot+1)+' will be cut into 2 clips at current playhead. In full version this creates Slot '+(selectedSlot+1)+'A + B'); }
+function enableDrag(){
+  document.querySelectorAll('.clip').forEach((el, idx)=>{
+    el.draggable = true;
+    el.ondragstart = (e)=>{ e.dataTransfer.setData('clip', idx); };
+  });
+  document.querySelectorAll('.slot').forEach((el, idx)=>{
+    el.ondragover = (e)=>{ e.preventDefault(); el.style.borderColor='#ffcc00'; };
+    el.ondrop = (e)=>{
+      e.preventDefault();
+      saveHistory();
+      let clipIdx = e.dataTransfer.getData('clip');
+      slots[idx] = clips[clipIdx];
+      selectedSlot = idx;
+      render(); autoSave();
+    };
+  });
+}
+function splitClip(){ alert('Split: Slot '+(selectedSlot+1)+' will be cut into 2 clips at current playhead.'); }
 function addText(){ let t = prompt('Text for this scene?','Checkmate. Zed Gambit!'); if(t) document.getElementById('previewText').innerText=t; }
 function setFilter(f){ videoEl.style.filter=f; }
 function setSpeed(s){ videoEl.playbackRate=s; alert('Speed: '+s+'x'); }
+function setTransition(t){ currentTransition=t; document.getElementById('transitionLabel').innerText='Current: '+t+' - Applied between Slot '+(selectedSlot+1)+' and '+(selectedSlot+2); }
+function playAudio(input, type){
+  let url = URL.createObjectURL(input.files[0]);
+  document.getElementById(type+'Audio').src = url;
+  document.getElementById(type+'Audio').play();
+}
+function setVolume(type, v){ document.getElementById(type+'Audio').volume = v; }
 function exportMovie(){
   let filled = slots.filter(s=>s).length;
   alert('Exporting '+filled+'/6 slots...\n16:9 for YouTube + 9:16 for TikTok will be created.\nNext: Go to Stage 7 for Poster + Trailer');
 }
+loadSave();
 render();
 </script>
 </body>
