@@ -15,7 +15,7 @@ body { margin:0; background:#0a0a12; color:white; padding:16px; padding-bottom:4
 .hero h1 { font-size:30px; line-height:1.1; margin:0; }
 .hero h1 span { background:linear-gradient(90deg,#e50914,#facc15,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .hero p { color:#aaa; font-size:13px; }
-.steps { display:flex; gap:6px; overflow-x:auto; margin-top:16px; padding-bottom:4px; }
+.steps { display:flex; gap:6px; overflow-x:auto; margin-top:16px; padding-bottom:4px; scroll-behavior:smooth; }
 .stepBtn { white-space:nowrap; background:#1a1a28; border:1px solid #333; color:#bbb; padding:10px 14px; border-radius:20px; font-size:12px; font-weight:800; cursor:pointer; }
 .stepBtn.active { background:#e50914; color:white; border-color:#e50914; }
 .card { background:#16161f; border:1px solid #2a2a3a; border-radius:20px; padding:18px; margin-top:14px; display:none; }
@@ -33,8 +33,6 @@ textarea { min-height:80px; }
 .shot span { display:inline-block; background:#222; padding:4px 8px; border-radius:10px; font-size:11px; margin:6px 4px 0 0; color:#ddd; }
 .videoBox { background:black; border-radius:14px; overflow:hidden; margin-top:12px; }
 video { width:100%; display:block; max-height:260px; }
-.bar { background:#222; height:10px; border-radius:20px; overflow:hidden; margin-top:12px; }
-.fill { height:100%; width:0%; background:linear-gradient(90deg,#e50914,#facc15); transition:width 0.3s; }
 .status { font-size:13px; color:#aaa; margin-top:8px; text-align:center; }
 .timeline { display:flex; gap:6px; margin-top:12px; overflow-x:auto; }
 .clip { min-width:90px; background:#222; border:2px solid #444; border-radius:10px; padding:8px; text-align:center; cursor:pointer; }
@@ -51,10 +49,10 @@ video { width:100%; display:block; max-height:260px; }
 </style>
 </head>
 <body>
-<div class="topbar"><div class="logo">🎬 CINEMA<span>AI</span></div><a href="#" onclick="go(5)">+ New Movie</a></div>
+<div class="topbar"><div class="logo">🎬 CINEMA<span>AI</span></div><a href="#" onclick="go(0); return false;">+ New Movie</a></div>
 <div class="hero"><h1>Full AI Movie Studio<br><span>Idea → Finished Film</span></h1><p>We make the prompt. You generate in Flow. Upload back. We finish it.</p></div>
 
-<div class="steps">
+<div class="steps" id="stepsBar">
 <button class="stepBtn active" onclick="go(0)">01 💡 Idea</button>
 <button class="stepBtn" onclick="go(1)">02 📜 Script</button>
 <button class="stepBtn" onclick="go(2)">03 🎭 Cast</button>
@@ -77,7 +75,7 @@ video { width:100%; display:block; max-height:260px; }
 <div class="card" id="card1">
 <label>📜 Auto Script</label>
 <textarea id="script" rows="6">Press Generate Script from Idea...</textarea>
-<button class="btn" onclick="go(3)">Break Into Shots →</button>
+<button class="btn" onclick="go(2)">Go To Cast →</button>
 </div>
 
 <div class="card" id="card2">
@@ -175,7 +173,8 @@ function go(i){
   document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('.stepBtn').forEach(b=>b.classList.remove('active'));
   document.getElementById('card'+i).classList.add('active');
-  document.querySelectorAll('.stepBtn')[i].classList.add('active');
+  let btns = document.querySelectorAll('.stepBtn');
+  if(btns[i]){ btns[i].classList.add('active'); btns[i].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }
   window.scrollTo({top:0, behavior:'smooth'});
 }
 function pick(el,g){ document.querySelectorAll('#'+g+' .chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
@@ -196,7 +195,6 @@ function filterShots(f, el){
   document.querySelectorAll('#locFilter .chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
   renderShots(f);
 }
-// === PROMPT + UPLOAD MODE - NO API ===
 function generateVideo(){
   let prompt = document.getElementById('prompt').value.trim();
   let style = document.querySelector('#styles .active') ? document.querySelector('#styles .active').textContent : 'Cinematic';
