@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin - CINEMA AI</title>
+<style>*{box-sizing:border-box;font-family:Arial}body{margin:0;background:#0a0a12;color:#fff;padding:16px}.card{background:#16161f;border:1px solid #2a2a3a;border-radius:20px;padding:18px;margin-top:14px}.userRow{background:#0a0a12;border:1px solid #333;border-radius:12px;padding:12px;margin-top:10px}button{width:100%;background:#e50914;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:900;margin-top:10px;cursor:pointer}.stat{display:inline-block;background:#0a0a12;border:1px solid #333;border-radius:12px;padding:14px;margin:4px;text-align:center;min-width:100px}.stat b{font-size:22px;display:block}</style></head>
+<body>
+<h2>⚙️ Admin Dashboard - CINEMA AI</h2><p id="who" style="color:#aaa;">Checking admin...</p>
+<div><span class="stat"><b id="cUsers">0</b>Total Users</span><span class="stat"><b id="cMovies">0</b>Total Movies</span></div>
+<div class="card"><h3>👥 All Real Users (From Firebase)</h3><div id="usersList">Loading...</div></div>
+<div class="card"><h3>🎬 All Movies (From Firebase)</h3><div id="moviesList">Loading...</div></div>
+<button onclick="location.href='studio.html'">Back To Studio →</button>
+<button onclick="logout()" style="background:#222;border:1px solid #444;">Logout</button>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore, doc, getDoc, collection, getDocs, deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCHODLKOz22vDUwX99S2wEYZKfKTndhlaM",authDomain:"cinema-ai-cef5d.firebaseapp.com",projectId:"cinema-ai-cef5d",storageBucket:"cinema-ai-cef5d.firebasestorage.app",messagingSenderId:"457585448912",appId:"1:457585448912:web:60b0e688f12b9f500fcbd5",measurementId:"G-YG06VQNE65"};
+const app=initializeApp(firebaseConfig); const auth=getAuth(app); const db=getFirestore(app);
+onAuthStateChanged(auth, async(user)=>{ if(!user) location.href="index.html"; else { const snap=await getDoc(doc(db,"users",user.uid)); const data=snap.data(); document.getElementById('who').textContent="Logged in as: "+user.email+" | Role: "+(data?.role||"user"); if(data?.role!=="admin"){ alert("You are not admin. To make yourself admin: Go to Firebase > Firestore > users > your user > edit role to admin"); location.href="studio.html"; return; } loadAll(); }});
+async function loadAll(){ const uSnap=await getDocs(collection(db,"users")); document.getElementById('cUsers').textContent=uSnap.size; let h=""; uSnap.forEach(d=>{ const u=d.data(); h+=`<div class="userRow"><b>${u.name||'No name'}</b><br><span style="color:#aaa;font-size:13px;">${u.email} • Role: ${u.role} • ${u.createdAt||''}</span><br><button onclick="delUser('${d.id}')" style="background:#222;border:1px solid #444;padding:8px;margin-top:8px;">🗑️ Delete User</button></div>`; }); document.getElementById('usersList').innerHTML=h||"No users yet"; const mSnap=await getDocs(collection(db,"movies")); document.getElementById('cMovies').textContent=mSnap.size; let mh=""; mSnap.forEach(d=>{ const m=d.data(); mh+=`<div class="userRow"><b>${(m.title||'').slice(0,60)}</b><br><span style="color:#aaa;font-size:13px;">By ${m.email} • ${m.createdAt||''}</span></div>`; }); document.getElementById('moviesList').innerHTML=mh||"No movies yet"; }
+window.delUser=async(id)=>{ if(confirm('Delete this user?')){ await deleteDoc(doc(db,"users",id)); loadAll(); } }
+window.logout=async()=>{ await signOut(auth); location.href="index.html"; }
+</script></body></html>
