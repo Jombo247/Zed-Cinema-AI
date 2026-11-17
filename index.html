@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CINEMA AI - Login</title>
 <style>*{box-sizing:border-box;font-family:Arial}body{margin:0;background:#0a0a12;color:#fff;padding:20px}input{width:100%;background:#16161f;border:1px solid #333;color:#fff;padding:14px;border-radius:12px;margin:8px 0}button{width:100%;background:#e50914;color:#fff;border:none;padding:16px;border-radius:14px;font-weight:900;font-size:16px;margin-top:10px;cursor:pointer}.card{background:#16161f;border:1px solid #2a2a3a;border-radius:20px;padding:20px;max-width:460px;margin:20px auto}.tab{display:flex;gap:8px}.tab button{background:#222;border:1px solid #444}.tab button.active{background:#e50914}</style></head>
@@ -5,18 +6,21 @@
 <div class="card">
 <h1 style="text-align:center;">🎬 CINEMA <span style="color:#e50914;">AI</span></h1><p style="text-align:center;color:#aaa;font-size:13px;">Real Account - Saved in Firebase Cloud</p>
 <div class="tab"><button id="tL" class="active" onclick="show('login')">Login</button><button id="tR" onclick="show('reg')">Register</button></div>
-<div id="loginBox"><input id="lEmail" placeholder="Email"><input id="lPass" type="password" placeholder="Password"><button onclick="login()">Login →</button></div>
+<div id="loginBox"><input id="lEmail" placeholder="Email"><input id="lPass" type="password" placeholder="Password"><button onclick="login()">Login →</button><p onclick="forgot()" style="text-align:center;color:#facc15;font-size:13px;cursor:pointer;margin-top:12px;">Forgot Password? Tap here to reset</p><p onclick="togglePass()" style="text-align:center;color:#aaa;font-size:12px;cursor:pointer;">👁️ Show / Hide Password</p></div>
 <div id="regBox" style="display:none;"><input id="rName" placeholder="Full Name"><input id="rEmail" placeholder="Email"><input id="rPass" type="password" placeholder="Password (6+ chars)"><button style="background:#22c55e;" onclick="register()">Create Account →</button></div>
 <p id="msg" style="color:#facc15;text-align:center;font-size:13px;"></p>
 </div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {getFirestore, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyCHODLKOz22vDUwX99S2wEYZKfKTndhlaM",authDomain:"cinema-ai-cef5d.firebaseapp.com",projectId:"cinema-ai-cef5d",storageBucket:"cinema-ai-cef5d.firebasestorage.app",messagingSenderId:"457585448912",appId:"1:457585448912:web:60b0e688f12b9f500fcbd5",measurementId:"G-YG06VQNE65"};
 const app=initializeApp(firebaseConfig); const auth=getAuth(app); const db=getFirestore(app);
 window.show=(t)=>{document.getElementById('loginBox').style.display=t=='login'?'block':'none';document.getElementById('regBox').style.display=t=='reg'?'block':'none';document.getElementById('tL').classList.toggle('active',t=='login');document.getElementById('tR').classList.toggle('active',t=='reg');}
+window.togglePass=()=>{ const p=document.getElementById('lPass'); p.type=p.type==='password'?'text':'password'; }
+window.forgot=async()=>{ const email=document.getElementById('lEmail').value; if(!email) return alert('Type your email first in the Email box, then tap Forgot Password'); try{ await sendPasswordResetEmail(auth, email); alert('✅ Check your email! We sent a reset link to '+email); }catch(e){ alert('❌ '+e.message); } }
 window.register=async()=>{try{const name=document.getElementById('rName').value;const email=document.getElementById('rEmail').value;const pass=document.getElementById('rPass').value;const cred=await createUserWithEmailAndPassword(auth,email,pass);await setDoc(doc(db,"users",cred.user.uid),{name:name,email:email,role:"user",createdAt:new Date().toISOString()});document.getElementById('msg').textContent="✅ Account created! Logging in...";setTimeout(()=>location.href="studio.html",800);}catch(e){document.getElementById('msg').textContent="❌ "+e.message;}}
 window.login=async()=>{try{const email=document.getElementById('lEmail').value;const pass=document.getElementById('lPass').value;const cred=await signInWithEmailAndPassword(auth,email,pass);const snap=await getDoc(doc(db,"users",cred.user.uid));const data=snap.data();if(data && data.role==="admin"){location.href="admin.html";}else{location.href="studio.html";}}catch(e){document.getElementById('msg').textContent="❌ "+e.message;}}
 </script></body></html>
+
 
