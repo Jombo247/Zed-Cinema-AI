@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CINEMA AI - Full AI Movie Studio</title>
+<style>
+* { box-sizing:border-box; font-family:-apple-system, Arial, sans-serif; }
+body { margin:0; background:#0a0a12; color:white; padding:16px; padding-bottom:40px; }
+.topbar { display:flex; justify-content:space-between; align-items:center; }
+.logo { font-size:22px; font-weight:900; } .logo span { color:#e50914; }
+.topbar a { background:#e50914; color:white; text-decoration:none; padding:10px 16px; border-radius:20px; font-weight:800; font-size:13px; }
+.hero { text-align:center; padding:22px 10px 6px; }
+.hero h1 { font-size:30px; line-height:1.1; margin:0; }
+.hero h1 span { background:linear-gradient(90deg,#e50914,#facc15,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hero p { color:#aaa; font-size:13px; }
+.steps { display:flex; gap:6px; overflow-x:auto; margin-top:16px; padding-bottom:4px; }
+.stepBtn { white-space:nowrap; background:#1a1a28; border:1px solid #333; color:#bbb; padding:10px 14px; border-radius:20px; font-size:12px; font-weight:800; cursor:pointer; }
+.stepBtn.active { background:#e50914; color:white; border-color:#e50914; }
+.card { background:#16161f; border:1px solid #2a2a3a; border-radius:20px; padding:18px; margin-top:14px; display:none; }
+.card.active { display:block; }
+label { font-size:12px; font-weight:800; color:#bbb; text-transform:uppercase; display:block; margin:14px 0 6px; }
+textarea, input, select { width:100%; background:#0a0a12; border:1px solid #333; color:white; border-radius:12px; padding:13px; font-size:14px; outline:none; }
+textarea { min-height:80px; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { background:#22222f; border:1px solid #333; color:#ddd; padding:9px 13px; border-radius:20px; font-size:13px; cursor:pointer; }
+.chip.active { background:#e50914; border-color:#e50914; color:white; font-weight:800; }
+.btn { width:100%; background:#e50914; color:white; border:none; padding:16px; border-radius:14px; font-size:16px; font-weight:900; margin-top:16px; cursor:pointer; }
+.btn.green { background:#22c55e; } .btn.dark { background:#222; border:1px solid #444; }
+.shot { background:#0a0a12; border:1px solid #333; border-radius:14px; padding:12px; margin-top:10px; }
+.shot b { font-size:14px; } .shot p { margin:6px 0 0; color:#aaa; font-size:13px; line-height:1.5; }
+.shot span { display:inline-block; background:#222; padding:4px 8px; border-radius:10px; font-size:11px; margin:6px 4px 0 0; color:#ddd; }
+.videoBox { background:black; border-radius:14px; overflow:hidden; margin-top:12px; }
+video { width:100%; display:block; max-height:260px; }
+.bar { background:#222; height:10px; border-radius:20px; overflow:hidden; margin-top:12px; }
+.fill { height:100%; width:0%; background:linear-gradient(90deg,#e50914,#facc15); transition:width 0.3s; }
+.status { font-size:13px; color:#aaa; margin-top:8px; text-align:center; }
+.timeline { display:flex; gap:6px; margin-top:12px; overflow-x:auto; }
+.clip { min-width:90px; background:#222; border:2px solid #444; border-radius:10px; padding:8px; text-align:center; cursor:pointer; }
+.clip.active { border-color:#facc15; background:#333; }
+.clip img { width:100%; height:50px; object-fit:cover; border-radius:6px; }
+.clip p { margin:6px 0 0; font-size:11px; }
+.row { display:flex; gap:8px; } .row > * { flex:1; }
+.toggle { display:flex; justify-content:space-between; align-items:center; background:#0a0a12; border:1px solid #333; border-radius:12px; padding:12px; margin-top:10px; font-size:13px; }
+.toggle input { width:44px; }
+.preview { background:#000; border-radius:14px; padding:16px; margin-top:12px; text-align:center; }
+.preview h3 { margin:0; } .preview p { color:#aaa; font-size:13px; }
+.badge { display:inline-block; background:#22c55e; color:white; padding:5px 10px; border-radius:20px; font-size:11px; font-weight:800; margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="logo">🎬 CINEMA<span>AI</span></div><a href="#" onclick="go(5)">+ New Movie</a></div>
+<div class="hero"><h1>Full AI Movie Studio<br><span>Idea → Finished Film</span></h1><p>Write it. Shoot it. Voice it. Edit it. Export it. All in one place.</p></div>
+
+<div class="steps">
+<button class="stepBtn active" onclick="go(0)">01 💡 Idea</button>
+<button class="stepBtn" onclick="go(1)">02 📜 Script</button>
+<button class="stepBtn" onclick="go(2)">03 🎭 Cast</button>
+<button class="stepBtn" onclick="go(3)">04 🎥 Scene & Shot</button>
+<button class="stepBtn" onclick="go(4)">05 🎬 AI Video</button>
+<button class="stepBtn" onclick="go(5)">06 🎙️ Voice & Sound</button>
+<button class="stepBtn" onclick="go(6)">07 ✂️ Editing & Export</button>
+</div>
+
+<div class="card active" id="card0">
+<label>🎬 Your Movie Idea</label>
+<textarea id="prompt">A brave Zambian girl discovers a magical lion in Lusaka and must save her village from darkness...</textarea>
+<label>🎨 Style</label>
+<div class="chips" id="styles"><div class="chip active" onclick="pick(this,'styles')">🎬 Cinematic</div><div class="chip" onclick="pick(this,'styles')">👻 Horror</div><div class="chip" onclick="pick(this,'styles')">💖 Nollywood Drama</div><div class="chip" onclick="pick(this,'styles')">🤖 Sci-Fi</div><div class="chip" onclick="pick(this,'styles')">🎌 Anime</div></div>
+<label>⏱️ Duration</label>
+<select id="duration"><option>30 sec - Trailer</option><option>60 sec - Scene</option><option>2 min - Short Film</option></select>
+<button class="btn" onclick="makeScript()">Generate Script →</button>
+</div>
+
+<div class="card" id="card1">
+<label>📜 Auto Script</label>
+<textarea id="script" rows="6">Press Generate Script from Idea...</textarea>
+<button class="btn" onclick="go(3)">Break Into Shots →</button>
+</div>
+
+<div class="card" id="card2">
+<label>🎭 Main Character</label><input id="charName" value="Amara - 16, Brave, Lusaka">
+<label>🎭 Villain / Challenge</label><input value="Darkness Spirit - Controls the night">
+<label>📍 Location</label><input value="Lusaka Village, Market, Forest">
+<button class="btn" onclick="go(3)">Continue To Shot Design →</button>
+</div>
+
+<div class="card" id="card3">
+<h3 style="margin:0">04 🎥 Scene & Shot Design</h3>
+<p style="color:#aaa; font-size:13px;">Breaks your story into camera shots, locations, lighting and actions.</p>
+<label>📍 Location Filter</label>
+<div class="chips" id="locFilter"><div class="chip active" onclick="filterShots('all',this)">All Locations</div><div class="chip" onclick="filterShots('Lusaka',this)">Lusaka</div><div class="chip" onclick="filterShots('Forest',this)">Forest</div><div class="chip" onclick="filterShots('Village',this)">Village</div></div>
+<div id="shots"></div>
+<button class="btn" onclick="go(4)">Generate Moving Footage →</button>
+</div>
+
+<div class="card" id="card4">
+<h3 style="margin:0">05 🎬 AI Video Generation</h3>
+<p style="color:#aaa; font-size:13px;">Generate actual moving footage from prompts + references.</p>
+<label>Reference Image / Style</label>
+<div class="chips" id="refs"><div class="chip active" onclick="pick(this,'refs')">🖼️ Use Movie Poster</div><div class="chip" onclick="pick(this,'refs')">📸 Upload My Photo</div><div class="chip" onclick="pick(this,'refs')">🎨 No Reference</div></div>
+<label>🎥 Motion Strength</label>
+<select id="motion"><option>Low - Slow Cinematic</option><option selected>Medium - Natural</option><option>High - Action / Fast</option></select>
+<button class="btn" id="genBtn" onclick="generateVideo()">✨ Generate Moving Footage</button>
+<div class="bar" style="display:none" id="barWrap"><div class="fill" id="fill"></div></div>
+<div class="status" id="vStatus"></div>
+<div id="videoResult" style="display:none">
+<div class="videoBox"><video id="mainVideo" controls poster="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800"><source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4"></video></div>
+<p style="font-size:12px; color:#888; text-align:center;">Preview footage - Connect Runway / Kling / Pika API for real AI generation from your prompt.</p>
+<button class="btn dark" onclick="go(5)">Add Voice & Sound →</button>
+</div>
+</div>
+
+<div class="card" id="card5">
+<h3 style="margin:0">06 🎙️ Voice & Sound</h3>
+<p style="color:#aaa; font-size:13px;">Dialogue, narration, music, ambience & sound effects.</p>
+<label>🗣️ Narrator Voice</label>
+<select id="voice"><option>Deep Movie Voice - Male</option><option>Warm Narrator - Female</option><option>Young Zambian Girl - Amara</option><option>Nyanja / Bemba Mix</option></select>
+<label>🎵 Music</label>
+<div class="chips" id="music"><div class="chip active" onclick="pick(this,'music')">🎻 Epic Orchestral</div><div class="chip" onclick="pick(this,'music')">🥁 African Drums</div><div class="chip" onclick="pick(this,'music')">😱 Horror Tension</div><div class="chip" onclick="pick(this,'music')">❤️ Emotional Piano</div><div class="chip" onclick="pick(this,'music')">🔇 No Music</div></div>
+<label>🌧️ Ambience</label>
+<div class="chips" id="amb"><div class="chip active" onclick="pick(this,'amb')">🏘️ Village Sounds</div><div class="chip" onclick="pick(this,'amb')">🌲 Forest / Night</div><div class="chip" onclick="pick(this,'amb')">🏙️ City - Lusaka</div><div class="chip" onclick="pick(this,'amb')">🔇 Silent</div></div>
+<label>💥 Sound Effects</label>
+<div class="chips" id="sfx"><div class="chip active" onclick="pick(this,'sfx')">🦁 Lion Roar</div><div class="chip" onclick="pick(this,'sfx')">⚡ Thunder</div><div class="chip" onclick="pick(this,'sfx')">👣 Footsteps</div><div class="chip" onclick="pick(this,'sfx')">🔥 Fire</div></div>
+<label>🎤 Dialogue Line - Amara</label>
+<input id="dialogue" value="I am not afraid of the darkness. I am the light of my village!">
+<button class="btn" onclick="alert('🔊 Playing: ' + document.getElementById('dialogue').value + ' | Music: ' + document.querySelector('#music .active').textContent)">▶️ Preview Voice + Sound</button>
+<button class="btn dark" onclick="go(6)">Go To Editing →</button>
+</div>
+
+<div class="card" id="card6">
+<h3 style="margin:0">07 ✂️ Editing & Finishing</h3>
+<p style="color:#aaa; font-size:13px;">Arrange clips, transitions, colour, subtitles & final export.</p>
+<label>🎞️ Timeline - Tap Clip To Select</label>
+<div class="timeline" id="timeline">
+<div class="clip active" onclick="selectClip(this,0)"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=300"><p>Shot 1 - Opening</p></div>
+<div class="clip" onclick="selectClip(this,1)"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300"><p>Shot 2 - Discovery</p></div>
+<div class="clip" onclick="selectClip(this,2)"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=300"><p>Shot 3 - Chase</p></div>
+<div class="clip" onclick="selectClip(this,3)"><img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=300"><p>Shot 4 - Finale</p></div>
+</div>
+<div class="row"><div><label>🔀 Transition</label><select id="trans"><option>🎬 Cinematic Fade</option><option>⚡ Hard Cut</option><option>🌪️ Zoom In</option><option>✨ Dissolve</option><option>📸 Flash</option></select></div><div><label>🎨 Colour Grade</label><select id="grade"><option>🎬 Hollywood Teal</option><option>🌅 Warm Golden</option><option>🌑 Dark Moody</option><option>🎞️ Vintage Film</option><option>✨ Vivid</option></select></div></div>
+<label>💬 Subtitles</label>
+<div class="chips" id="subs"><div class="chip active" onclick="pick(this,'subs')">✅ English Subtitles ON</div><div class="chip" onclick="pick(this,'subs')">🇿🇲 Nyanja Subtitles</div><div class="chip" onclick="pick(this,'subs')">❌ No Subtitles</div></div>
+<div class="toggle"><span>🔤 Auto Subtitles from Dialogue</span><input type="checkbox" checked></div>
+<div class="toggle"><span>🎵 Auto Music Sync</span><input type="checkbox" checked></div>
+<div class="toggle"><span>📱 Auto Reformat for TikTok</span><input type="checkbox"></div>
+<div class="preview" id="finalPreview"><h3 id="finalTitle">THE LION OF LUSAKA</h3><p id="finalMeta">Cinematic • Teal Grade • Fade • English Subs • 30 sec</p><span class="badge">✅ READY TO EXPORT</span></div>
+<button class="btn green" onclick="exportMovie()">⬇️ Export Final Movie - MP4</button>
+<button class="btn dark" onclick="alert('🔗 Share link copied!')">🔗 Copy Share Link</button>
+</div>
+
+<p style="text-align:center; color:#666; font-size:12px; margin-top:20px;">CINEMA AI • Made in Zambia • Idea → Finished Film</p>
+
+<script>
+let allShots = [
+{ n:1, title:"Opening - Village at Dawn", loc:"Village", cam:"Wide Drone Shot", light:"Golden Hour - Warm Sunrise", action:"Village wakes up. Amara walks to market. Birds, smoke from cooking fires.", dur:"0-8s" },
+{ n:2, title:"Discovery - The Magical Lion", loc:"Forest", cam:"Close-Up + Slow Push In", light:"Mystical Blue / Fog", action:"Amara hears roar. Lion appears, eyes glow gold. She steps back, then reaches out.", dur:"8-18s" },
+{ n:3, title:"Chase - Darkness Attacks", loc:"Lusaka", cam:"Handheld Shaky Cam + Fast Pan", light:"Dark / Storm - Lightning Flashes", action:"Darkness spirit chases Amara through Lusaka streets. People run. Dramatic chase.", dur:"18-26s" },
+{ n:4, title:"Finale - Light Wins", loc:"Village", cam:"Hero Low Angle + Crane Up", light:"Bright Epic - Sun Breaks Through", action:"Amara + Lion stand together. Light explodes. Village saved. Everyone cheers.", dur:"26-30s" },
+];
+function go(i){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.stepBtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('card'+i).classList.add('active');
+  document.querySelectorAll('.stepBtn')[i].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function pick(el,g){ document.querySelectorAll('#'+g+' .chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
+function makeScript(){
+  let p = document.getElementById('prompt').value;
+  let s = "FADE IN:\n\nSCENE 1 - VILLAGE AT DAWN\n" + p + "\n\nAMARA (V.O.): I am not afraid of the darkness...\n\nSCENE 2 - FOREST\nAmara discovers the magical lion. The lion speaks.\n\nSCENE 3 - LUSAKA CHASE\nDarkness attacks. Amara runs.\n\nSCENE 4 - FINALE\nAmara and the lion save the village.\n\nTHE END.";
+  document.getElementById('script').value = s;
+  renderShots(); go(1);
+}
+function renderShots(filter){
+  let html = "";
+  allShots.filter(s=> !filter || filter=='all' || s.loc==filter).forEach(s=>{
+    html += `<div class="shot"><b>Shot ${s.n} - ${s.title}</b><p>${s.action}</p><span>📍 ${s.loc}</span><span>🎥 ${s.cam}</span><span>💡 ${s.light}</span><span>⏱️ ${s.dur}</span></div>`;
+  });
+  document.getElementById('shots').innerHTML = html;
+}
+function filterShots(f, el){
+  document.querySelectorAll('#locFilter .chip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
+  renderShots(f);
+}
+function generateVideo(){
+  let btn = document.getElementById('genBtn'); btn.disabled=true; btn.textContent='🎬 Rendering...';
+  document.getElementById('barWrap').style.display='block';
+  let steps = ['Reading shot list...','Generating Scene 1...','Generating Scene 2...','Generating Scene 3...','Generating Scene 4...','Adding motion...','Upscaling to 4K...'];
+  let i=0;
+  let int = setInterval(()=>{
+    if(i>=steps.length){ clearInterval(int); document.getElementById('videoResult').style.display='block'; document.getElementById('barWrap').style.display='none'; btn.disabled=false; btn.textContent='✨ Regenerate Footage'; document.getElementById('mainVideo').play(); return; }
+    document.getElementById('vStatus').textContent = steps[i];
+    document.getElementById('fill').style.width = ((i+1)/steps.length*100)+'%';
+    i++;
+  }, 900);
+}
+function selectClip(el, idx){
+  document.querySelectorAll('.clip').forEach(c=>c.classList.remove('active')); el.classList.add('active');
+  updatePreview();
+}
+function updatePreview(){
+  let t = document.getElementById('trans').value;
+  let g = document.getElementById('grade').value;
+  let title = document.getElementById('prompt').value.split(' ').slice(0,4).join(' ').toUpperCase() || 'MY MOVIE';
+  document.getElementById('finalTitle').textContent = title;
+  document.getElementById('finalMeta').textContent = g + ' • ' + t + ' • ' + document.querySelector('#subs .active').textContent + ' • ' + document.getElementById('duration').value;
+}
+document.getElementById('trans').addEventListener('change', updatePreview);
+document.getElementById('grade').addEventListener('change', updatePreview);
+function exportMovie(){
+  alert('🎉 Exporting Final Movie!\n\nTitle: ' + document.getElementById('finalTitle').textContent + '\n' + document.getElementById('finalMeta').textContent + '\n\nYour MP4 is rendering... You will get a download link in 30 seconds.');
+}
+renderShots();
+</script>
+</body>
+</html>
+
+
