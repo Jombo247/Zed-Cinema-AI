@@ -16,10 +16,10 @@ textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #333;backgro
 </head>
 <body>
 <h1>2 - SCREENPLAY</h1>
-<p class="small">Shots and Scenes from Prompt - Groq + Gemini - Auto Fallback - Free</p>
+<p class="small">Shots and Scenes from Prompt - Gemini Only - Free</p>
 <div class="card">
 <textarea id="prompt" rows="3" placeholder="Prompt: Themba in Lusaka Market, morning, finds chess board..."></textarea>
-<button class="btn" onclick="generateReal()">🤖 Generate Shots & Scenes - Groq First, Gemini Backup</button>
+<button class="btn" onclick="generateReal()">🤖 Generate Shots & Scenes - Gemini</button>
 <p class="small" id="loading"></p>
 <p class="small" id="source"></p>
 <div id="list"></div>
@@ -27,12 +27,11 @@ textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #333;backgro
 <a href="idea.html" class="btn-gray">← Back To 1 - Idea</a>
 </div>
 <script src="cinema-nav.js"></script>
-<script src="cinema-groq.js"></script>
 <script src="cinema-gemini.js"></script>
 <script>
 async function generateReal(){
   let p = document.getElementById('prompt').value || localStorage.getItem('cinema_idea') || 'Themba in Lusaka';
-  document.getElementById('loading').innerText = '🤖 AI is writing... Trying Groq first, then Gemini if needed...';
+  document.getElementById('loading').innerText = '🤖 Gemini is writing...';
   let res = await aiScreenplay(p);
   document.getElementById('loading').innerText = '';
   if(res){
@@ -46,5 +45,3 @@ if(saved) document.getElementById('list').innerHTML = `<div class="scene">${save
 </script>
 </body>
 </html>
-
-
