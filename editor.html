@@ -25,7 +25,7 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 .media-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .media-item{background:#222;border-radius:8px;padding:8px;cursor:pointer}
 .media-item img{width:100%;border-radius:6px}
-.ai-box{background:#1a1a2e;border:1px solid #4a4aff;border-radius:10px;padding:12px}
+.ai-box{background:#1a1a2e;border:1px solid #00d26a;border-radius:10px;padding:12px}
 .small{font-size:12px;color:#aaa}
 .navbtn{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
 .ai-result{background:#222;border-radius:10px;padding:12px;margin:8px 0;white-space:pre-wrap;font-size:13px}
@@ -33,7 +33,7 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 </head>
 <body>
 <h1>4 - MIXING STUDIO</h1>
-<p class="small">Zed Gambit - Professional Mixing Studio - Live Timeline - Dedicated Page - Groq + Gemini</p>
+<p class="small">Zed Gambit - Professional Mixing Studio - Live Timeline - Gemini Only</p>
 
 <!-- LIVE PREVIEW -->
 <div id="preview">
@@ -77,18 +77,18 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 <button class="btn" onclick="fixSync()">🔧 Auto-Fix Sync</button>
 </div>
 
-<!-- ADVANCED AI TOOLS - REAL GROQ + GEMINI FALLBACK -->
-<h3>🤖 ADVANCED AI TOOLS - Groq + Gemini - Real - Auto Fallback</h3>
+<!-- AI TOOLS - GEMINI ONLY -->
+<h3>🤖 AI TOOLS - Gemini Only - Free</h3>
 <div class="card ai-box">
-<p class="small">Tries Groq first. If Groq hits limit, auto uses Gemini. Save both keys in boxes at top.</p>
+<p class="small">Gemini only. No Groq. Paste your key in the GREEN box at top once, it stays saved.</p>
 <textarea id="aiPrompt" rows="2" placeholder="AI Prompt: Example: Themba in Lusaka Market, finds chess board, curious..."></textarea>
-<button class="btn" onclick="aiCaptions()">🤖 Auto-Captions - Groq / Gemini</button>
-<button class="btn" onclick="aiAutoCut()">🤖 Auto-Cut - Groq / Gemini</button>
-<button class="btn" onclick="aiEnhance()">🤖 Enhance Face / Voice - Groq / Gemini</button>
+<button class="btn" onclick="aiCaptions()">🤖 Auto-Captions - Gemini</button>
+<button class="btn" onclick="aiAutoCut()">🤖 Auto-Cut - Gemini</button>
+<button class="btn" onclick="aiEnhance()">🤖 Enhance Face / Voice - Gemini</button>
 <button class="btn" onclick="aiBackground()">🤖 Background Remove</button>
-<button class="btn" onclick="aiMusicSync()">🤖 Music Sync - Groq / Gemini</button>
-<button class="btn" onclick="aiColour()">🤖 Auto-Colour - Groq / Gemini</button>
-<button class="btn btn-yellow" onclick="aiScriptToScene()">🤖 Script To Scene - Groq / Gemini</button>
+<button class="btn" onclick="aiMusicSync()">🤖 Music Sync - Gemini</button>
+<button class="btn" onclick="aiColour()">🤖 Auto-Colour - Gemini</button>
+<button class="btn btn-yellow" onclick="aiScriptToScene()">🤖 Script To Scene - Gemini</button>
 <p id="aiMsg" style="font-size:12px;color:#aab0ff"></p>
 <p id="aiSource" style="font-size:12px;color:#00d26a"></p>
 <div id="aiResult"></div>
@@ -127,7 +127,6 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 
 <script src="cinema-nav.js"></script>
 <script src="cinema-continuity.js"></script>
-<script src="cinema-groq.js"></script>
 <script src="cinema-gemini.js"></script>
 <script>
 let media = [
@@ -169,7 +168,6 @@ function runDetection(showAlert=true){
   if(missing.length){ box.innerHTML = `<div style="background:#3a0000;border:1px solid #d32f2f;border-radius:10px;padding:12px;font-size:13px">❌ <b>${missing.length} MISSING MEDIA</b><br>${missing.map(m=>'• '+m.name+' - Re-upload or delete').join('<br>')}</div>`; if(showAlert) alert('Missing: '+missing.map(m=>m.name).join(', ')); }
   else { box.innerHTML = `<div style="background:#002a12;border:1px solid #00d26a;border-radius:10px;padding:12px;font-size:13px">✅ No missing media - All ready</div>`; if(showAlert) alert('No missing media'); }
 }
-// --- REAL AI TOOLS - GROQ FIRST, GEMINI FALLBACK ---
 function getPrompt(){ return document.getElementById('aiPrompt').value || localStorage.getItem('cinema_screenplay') || 'Themba in Lusaka Market, finds chess board'; }
 async function showAI(title, res){
   if(!res) return;
@@ -178,36 +176,36 @@ async function showAI(title, res){
   document.getElementById('aiResult').innerHTML = `<div class="ai-result"><b>${title} - ${res.source}</b><br>${res.text}</div><button class="btn btn-yellow" onclick="document.getElementById('subtitleText').innerText = document.getElementById('aiResult').innerText.slice(0,120)">✅ Use As Subtitle / Text</button>`;
 }
 async function aiCaptions(){
-  document.getElementById('aiMsg').innerText = '🤖 AI is writing captions... Trying Groq, then Gemini...';
+  document.getElementById('aiMsg').innerText = '🤖 Gemini is writing captions...';
   let r = await callAI('Write short subtitles / captions for this scene, 1 line per 3 seconds: ' + getPrompt());
   if(r) showAI('Auto-Captions', r);
 }
 async function aiScriptToScene(){
-  document.getElementById('aiMsg').innerText = '🤖 AI is writing scene... Trying Groq, then Gemini...';
+  document.getElementById('aiMsg').innerText = '🤖 Gemini is writing scene...';
   let r = await callAI('Turn this prompt into 1 full scene: Shot, Action, Dialogue, Camera. Use SAME character lock for Themba, Mama, Coach: ' + getPrompt());
   if(r) showAI('Script To Scene', r);
 }
 async function aiAutoCut(){
-  document.getElementById('aiMsg').innerText = '🤖 AI is planning cuts...';
+  document.getElementById('aiMsg').innerText = '🤖 Gemini is planning cuts...';
   let r = await callAI('For this scene, list where to cut silences and keep only best moments. Give timecodes 00:00 - 00:05 style: ' + getPrompt());
   if(r) showAI('Auto-Cut Plan', r);
 }
 async function aiEnhance(){
-  document.getElementById('aiMsg').innerText = '🤖 AI is checking continuity...';
+  document.getElementById('aiMsg').innerText = '🤖 Gemini is checking continuity...';
   let r = await callAI('Check continuity for this scene: Is Themba same face, age 16, short fade, white school shirt, blue trousers, Lusaka accent? List any fix needed: ' + getPrompt());
   if(r) showAI('Enhance Face / Voice - Continuity Fix', r);
 }
 async function aiMusicSync(){
-  document.getElementById('aiMsg').innerText = '🤖 AI is syncing music...';
+  document.getElementById('aiMsg').innerText = '🤖 Gemini is syncing music...';
   let r = await callAI('Suggest music sync points for this scene - where beat should hit on cut, what mood, what tempo: ' + getPrompt());
   if(r) showAI('Music Sync', r);
 }
 async function aiColour(){
-  document.getElementById('aiMsg').innerText = '🤖 AI is suggesting colour...';
+  document.getElementById('aiMsg').innerText = '🤖 Gemini is suggesting colour...';
   let r = await callAI('Suggest cinematic colour grade for this scene - warm Lusaka morning, contrast, saturation: ' + getPrompt());
   if(r) showAI('Auto-Colour Grade', r);
 }
-function aiBackground(){ alert('Background Remove: This needs video processing - in browser it will use B&W / Vintage filters for now. AI will describe the background to remove.'); aiEnhance(); }
+function aiBackground(){ alert('Background Remove: This needs video processing - in browser it will use B&W / Vintage filters for now. Gemini will describe the background to remove.'); aiEnhance(); }
 renderMedia(); renderTimeline();
 </script>
 </body>
