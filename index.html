@@ -4,197 +4,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - Home</title>
+<title>Zed Cinema AI - Home</title>
 <style>
 body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
+h1{font-size:24px;color:#ffcc00}
 .card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
 .btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px}
 .btn-gray{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
 .small{font-size:12px;color:#aaa}
+.step{border-left:4px solid #ffcc00;padding:10px;margin:8px 0;background:#222;border-radius:8px}
 </style>
 </head>
 <body>
-<h1>🎬 CINEMA - HOME</h1>
-<p class="small">Projects OR Start Now Project. 1 Work Plan = 1 Movie.</p>
+<h1>🎬 ZED CINEMA AI</h1>
+<p class="small">Zed Gambit - Your Movie Studio - Gemini Only - Free - No Groq</p>
 
 <div class="card">
-<b style="font-size:18px">🎬 Zed Gambit</b>
-<p class="small">Lusaka - Chess Movie - Themba, 16 - Progress 20%</p>
-<a href="idea.html" class="btn">📂 OPEN PROJECT - Go To Stage 1</a>
+<h2>🎬 Your Movie: Zed Gambit</h2>
+<p>Themba, 16, short fade, white school shirt, blue trousers, Lusaka accent. Finds wooden chess board in Lusaka Market. Coach Chanda trains him. Mama supports him. He wins Zed Gambit Cup.</p>
+<p class="small">Characters are locked. Same face, same clothes, same voice in every scene.</p>
 </div>
 
 <div class="card">
-<b>📋 WORK PLAN - Tap A Stage To Open Its Page</b>
-<a href="idea.html" class="btn-gray">1 - Movie Idea →</a>
-<a href="screenplay.html" class="btn-gray">2 - Screenplay - Shots & Scenes →</a>
-<a href="scenes.html" class="btn-gray">3 - Scenes - Upload Videos + Audio →</a>
-<a href="editor.html" class="btn-gray">4 - Mixing - Professional Mixing Studio →</a>
-<a href="final.html" class="btn-gray">5 - Final - Prepare For Export →</a>
-<a href="continuity.html" class="btn-gray">6 - Continuity →</a>
+<h2>📋 WORK PLAN - Tap To Start</h2>
+<div class="step"><b>1 - IDEA</b><br><span class="small">Your movie idea, expand with Gemini</span><br><a href="idea.html" class="btn">Start 1 - Idea →</a></div>
+<div class="step"><b>2 - SCREENPLAY</b><br><span class="small">Shots and scenes from your idea</span><br><a href="screenplay.html" class="btn">Start 2 - Screenplay →</a></div>
+<div class="step"><b>3 - SCENES</b><br><span class="small">Scene list, prompts for video</span><br><a href="scenes.html" class="btn">Start 3 - Scenes →</a></div>
+<div class="step"><b>4 - MIXING STUDIO</b><br><span class="small">Edit video, audio, text, AI tools</span><br><a href="editor.html" class="btn">Start 4 - Mixing Studio →</a></div>
+<div class="step"><b>5 - FINAL</b><br><span class="small">Prepare for export, poster, trailer</span><br><a href="final.html" class="btn">Start 5 - Final →</a></div>
+<div class="step"><b>6 - CONTINUITY</b><br><span class="small">Check face, clothes, voice stay same</span><br><a href="continuity.html" class="btn">Start 6 - Continuity →</a></div>
 </div>
 
 <div class="card">
-<b>➕ Start New Project</b>
-<a href="idea.html" class="btn-gray">+ Start Now - New Movie</a>
+<p class="small">AI: Gemini Only. Paste your Gemini key once in the GREEN box on any page, it stays saved in your phone.</p>
+<p class="small">No GitHub. No Groq. Upload only clean files from this chat.</p>
 </div>
+
 <script src="cinema-nav.js"></script>
-</body>
-</html>
-
-
-2 - Create NEW file idea.html - Stage 1
-
-GitHub: 3 dots > Add file > Create new file > Name idea.html > Paste > Commit
-
-html
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - 1 Idea</title>
-<style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
-.card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
-.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px;border:none;width:100%;cursor:pointer}
-.btn-gray{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
-input,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
-.small{font-size:12px;color:#aaa}
-</style>
-</head>
-<body>
-<h1>1 - MOVIE IDEA</h1>
-<p class="small">1 Work Plan = 1 Movie Idea.</p>
-<div class="card">
-<input id="title" placeholder="Movie Title - Example: Zed Gambit" value="Zed Gambit">
-<textarea id="idea" rows="4">A brave Zambian boy in Lusaka discovers chess, loses first game, trains hard, wins Zed Gambit Cup.</textarea>
-<button class="btn" onclick="saveIdea()">💾 Save Idea</button>
-<p class="small" id="msg"></p>
-<a href="screenplay.html" class="btn-gray">Next → 2 - Screenplay</a>
-<a href="index.html" class="btn-gray">← Back To Home</a>
-</div>
-<script src="cinema-nav.js"></script>
-<script>
-function saveIdea(){ localStorage.setItem('cinema_title',document.getElementById('title').value); localStorage.setItem('cinema_idea',document.getElementById('idea').value); document.getElementById('msg').innerText='✅ Idea Saved'; }
-</script>
-</body>
-</html>
-
-
-3 - Create NEW file screenplay.html - Stage 2
-
-html
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - 2 Screenplay</title>
-<style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
-.card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
-.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px;border:none;width:100%;cursor:pointer}
-.btn-gray{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
-textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
-.scene{background:#222;border-radius:10px;padding:12px;margin:8px 0}
-.small{font-size:12px;color:#aaa}
-</style>
-</head>
-<body>
-<h1>2 - SCREENPLAY</h1>
-<p class="small">Shots and Scenes from Prompt.</p>
-<div class="card">
-<textarea id="prompt" rows="2" placeholder="Prompt: Themba in Lusaka Market, morning, finds chess board..."></textarea>
-<button class="btn" onclick="generate()">🤖 Generate Shots & Scenes From Prompt</button>
-<div id="list"></div>
-<a href="scenes.html" class="btn-gray">Next → 3 - Scenes</a>
-<a href="idea.html" class="btn-gray">← Back To 1 - Idea</a>
-</div>
-<script src="cinema-nav.js"></script>
-<script>
-let scenes=["Scene 1 - Themba Finds Chess | Wide Shot - Lusaka Market, morning","Scene 2 - First Game - Loses | Close-Up - Chess board, nervous","Scene 3 - Training Montage | Montage - Street chess, school chess","Scene 4 - Final - Cup Hall | Wide Shot - Big hall, crowd","Scene 5 - Checkmate - Wins | Close-Up - Checkmate, trophy"];
-function generate(){ let p=document.getElementById('prompt').value||'Themba in Lusaka'; document.getElementById('list').innerHTML=scenes.map(s=>`<div class="scene"><b>${s}</b><br><span class="small">Prompt: ${p}</span></div>`).join(''); }
-generate();
-</script>
-</body>
-</html>
-
-
-4 - Create NEW file scenes.html - Stage 3
-
-html
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - 3 Scenes</title>
-<style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
-.card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
-.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px;border:none;width:100%;cursor:pointer}
-.btn-gray{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
-input{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
-.scene{background:#222;border-radius:10px;padding:12px;margin:8px 0}
-.small{font-size:12px;color:#aaa}
-</style>
-</head>
-<body>
-<h1>3 - SCENES</h1>
-<p class="small">Upload Film Videos + Audio for each scene.</p>
-<div class="card">
-<div id="list"></div>
-<label class="small">Upload Film Video:</label>
-<input type="file" accept="video/*" multiple onchange="up('video',event)">
-<label class="small">Upload Audio - Music / Voice:</label>
-<input type="file" accept="audio/*" multiple onchange="up('audio',event)">
-<p class="small" id="msg"></p>
-<a href="editor.html" class="btn-gray">Next → 4 - Mixing Studio</a>
-<a href="screenplay.html" class="btn-gray">← Back To 2 - Screenplay</a>
-</div>
-<script src="cinema-nav.js"></script>
-<script>
-let scenes=[{t:"Scene 1 - Finds Chess",v:"❌ No video",a:"❌ No audio"},{t:"Scene 2 - Loses",v:"❌ No video",a:"❌ No audio"},{t:"Scene 3 - Training",v:"❌ No video",a:"❌ No audio"},{t:"Scene 4 - Final",v:"❌ No video",a:"❌ No audio"},{t:"Scene 5 - Wins",v:"❌ No video",a:"❌ No audio"}];
-function render(){ document.getElementById('list').innerHTML=scenes.map(s=>`<div class="scene"><b>${s.t}</b><br><span class="small">🎬 Video: ${s.v}</span><br><span class="small">🎵 Audio: ${s.a}</span></div>`).join(''); }
-function up(type,e){ scenes.forEach(s=>{ if(type==='video') s.v='✅ Video uploaded - '+e.target.files.length+' file(s)'; else s.a='✅ Audio uploaded - '+e.target.files.length+' file(s)'; }); render(); document.getElementById('msg').innerText='✅ Uploaded'; }
-render();
-</script>
-</body>
-</html>
-
-
-5 - Create NEW file continuity.html - Stage 6
-
-html
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - 6 Continuity</title>
-<style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
-.card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
-.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px;border:none;width:100%;cursor:pointer}
-.btn-gray{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
-.small{font-size:12px;color:#aaa}
-</style>
-</head>
-<body>
-<h1>6 - CONTINUITY</h1>
-<p class="small">Master Continuity System - Same person Scene 1 to Scene 15.</p>
-<div class="card">
-<b>👤 Themba - Age 16</b><p class="small">Face: Young Zambian boy, short black hair, brown eyes<br>Hair: Short fade, clean<br>Clothes: White school shirt, blue trousers, black shoes<br>Voice: Young Zambian male, Lusaka accent, calm<br>Identity: Main hero - chess player from Lusaka</p>
-<b>👤 Mama - Age 42</b><p class="small">Face: Zambian woman, braided hair, warm smile<br>Clothes: Chitenge wrapper, green top<br>Voice: Warm Zambian female, Lusaka accent</p>
-<b>👤 Coach Chanda - Age 55</b><p class="small">Face: Older Zambian man, grey beard, glasses<br>Clothes: Brown jacket, chess club t-shirt</p>
-<b>📍 Locations - Locked</b><p class="small">Lusaka Market | Lusaka School | Zed Gambit Cup Hall</p>
-<b>🎒 Props - Locked</b><p class="small">Wooden Chess Board - scratch on corner | Gold Trophy - red ribbon</p>
-<b>⏱️ Chronology</b><p class="small">1 Intro → 2 Loses → 3 Training → 4 Final → 5 Wins → 6 End</p>
-<button class="btn" onclick="alert('Continuity Check: ✅ Same face, age, hair, clothes, voice. Locations locked. Props locked.')">🔍 Check Continuity Now</button>
-<a href="final.html" class="btn-gray">← Back To 5 - Final</a>
-<a href="index.html" class="btn-gray">🏠 Back To Home</a>
-</div>
-<script src="cinema-nav.js"></script>
+<script src="cinema-gemini.js"></script>
 </body>
 </html>
 
