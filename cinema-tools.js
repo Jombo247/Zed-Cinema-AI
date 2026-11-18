@@ -1,4 +1,5 @@
--nav.js - FULL FILE - Delete old, paste this
+
+// cinema-nav.js - FULL FILE - Delete old, paste this
 // EVERY PAGE HAS ALL BUTTONS
 
 window.addEventListener('load', () => {
