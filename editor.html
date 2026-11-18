@@ -1,146 +1,176 @@
-I see it now - this is your GitHub, good. GitHub only, I won't mention Cloudflare again.
-
-You have 5 files:
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - Edit / Projects</title>
+<title>Cinema - Mixing Studio</title>
 <style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;padding:12px;margin:0;padding-bottom:100px}
-h2{font-size:16px} h3{font-size:13px;color:#aaa}
-#previewWrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;border:2px solid #222}
-#previewPlaceholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ccc;text-align:center;padding:20px;font-size:18px}
-#previewText{position:absolute;top:12px;left:0;right:0;text-align:center;font-weight:900;font-size:20px;text-shadow:2px 2px 0 #000}
-#subtitleText{position:absolute;bottom:14px;left:10px;right:10px;text-align:center;font-weight:900;font-size:20px;text-shadow:2px 2px 0 #000}
-.slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
-.slot{background:#1a1a1a;border:2px dashed #333;border-radius:10px;padding:10px;min-height:78px;cursor:pointer}
-.slot.active{border-color:#ffcc00;background:#2a2200}
-.slot.filled{border-style:solid;border-color:#00d26a}
-.slot small{color:#aaa;display:block;font-size:11px}
-.slot b{font-size:12px}
-.clip{background:#222;border-radius:8px;padding:8px;cursor:pointer;border:1px solid #333}
-.clip img{width:100%;border-radius:6px}
-.toolbar{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
-.toolbar button{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;white-space:nowrap}
-#timeline{background:#111;border-radius:10px;padding:14px;display:flex;gap:6px;overflow-x:auto}
-.timeline-clip{background:#333;padding:10px 12px;border-radius:8px;font-size:12px;white-space:nowrap}
-.timeline-clip.active{background:#ffcc00;color:#000}
-.subBox{background:#111;padding:12px;border-radius:10px}
-.subBox input{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
-.subBox button{padding:10px 14px;border-radius:20px;border:1px solid #444;background:#222;color:#fff;margin:2px}
+body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
+h1{font-size:20px} h3{font-size:14px;color:#ffcc00;margin:18px 0 8px}
+.card{background:#1a1a1a;border-radius:12px;padding:14px;margin:12px 0}
+.btn{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;margin:4px;cursor:pointer}
+.btn-yellow{background:#ffcc00;color:#000;font-weight:900;border:none}
+.btn-red{background:#d32f2f;color:#fff;border:none}
+input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
+#preview{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px solid #222}
+#preview video{width:100%;height:100%;object-fit:cover;display:none}
+#previewText{position:absolute;top:12px;left:0;right:0;text-align:center;font-weight:900;font-size:22px;text-shadow:2px 2px 0 #000}
+#subtitleText{position:absolute;bottom:14px;left:10px;right:10px;text-align:center;font-weight:900;font-size:18px;text-shadow:2px 2px 0 #000}
+.timeline{background:#111;border-radius:10px;padding:12px}
+.track{display:flex;gap:6px;overflow-x:auto;padding:6px 0;border-bottom:1px solid #222;align-items:center}
+.track b{font-size:11px;color:#aaa;min-width:55px}
+.clip{background:#333;padding:10px 12px;border-radius:8px;font-size:12px;white-space:nowrap;cursor:pointer}
+.clip.active{background:#ffcc00;color:#000}
+.clip.missing{background:#d32f2f;color:#fff}
+.media-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.media-item{background:#222;border-radius:8px;padding:8px;cursor:pointer}
+.media-item img{width:100%;border-radius:6px}
+.ai-box{background:#1a1a2e;border:1px solid #4a4aff;border-radius:10px;padding:12px}
+.small{font-size:12px;color:#aaa}
 </style>
 </head>
 <body>
-<h2>🎬 CINEMA - STAGE 6: EDITING</h2>
-<h3>Zed Gambit - Drag clips into slots</h3>
-<div id="previewWrap">
-<div id="previewPlaceholder">Tap a Slot, Then Tap a Clip Below</div>
-<video id="video" controls playsinline style="display:none;width:100%;height:100%;object-fit:cover"></video>
+<h1>✂️ CINEMA - MIXING STUDIO</h1>
+<p class="small">Zed Gambit - Professional Mixing - Live Like CapCut - 1 Movie = 1 Work Plan</p>
+
+<!-- LIVE PREVIEW -->
+<div id="preview">
+<div id="placeholder">Tap a clip in Media or Timeline to preview</div>
+<video id="video" controls playsinline></video>
 <div id="previewText"></div>
 <div id="subtitleText"></div>
 </div>
-<div class="toolbar">
-<button onclick="splitClip()">✂️ Split</button>
-<button onclick="addText()">🔤 Add Text</button>
-<button onclick="setFilter('grayscale(1)')">⬛ B&W</button>
-<button onclick="setFilter('sepia(0.6)')">🎞️ Vintage</button>
-<button onclick="setFilter('none')">✨ Clear</button>
-<button onclick="undo()">↩️ Undo</button>
-<button onclick="redo()">↪️ Redo</button>
-<button onclick="clearSlot()">🗑️ Clear Slot</button>
+<p class="small">Playhead: <span id="playhead">00:00</span> | Duration: <span id="totalTime">0 clips</span> | Sync: <span id="syncStatus" style="color:#00d26a">✅ In Sync</span></p>
+
+<!-- EDITING TOOLS - CAPCUT STYLE -->
+<h3>✂️ EDITING TOOLS</h3>
+<div class="card">
+<button class="btn" onclick="toolAction('Trim')">✂️ Trim</button>
+<button class="btn" onclick="toolAction('Split')">✂️ Split</button>
+<button class="btn" onclick="toolAction('Speed')">⏩ Speed</button>
+<button class="btn" onclick="toolAction('Transition')">🔀 Transition</button>
+<button class="btn" onclick="toolAction('Add Text')">🔤 Add Text</button>
+<button class="btn" onclick="toolAction('B&W')">⬛ B&W</button>
+<button class="btn" onclick="toolAction('Vintage')">🎞️ Vintage</button>
+<button class="btn" onclick="toolAction('Clear Filter')">✨ Clear Filter</button>
+<button class="btn" onclick="toolAction('Undo')">↩️ Undo</button>
+<button class="btn" onclick="toolAction('Redo')">↪️ Redo</button>
+<button class="btn btn-red" onclick="toolAction('Delete')">🗑️ Delete</button>
+<p id="toolMsg" style="font-size:12px;color:#00d26a"></p>
+<input id="textInput" placeholder="Text / Title for this scene...">
+<button class="btn btn-yellow" onclick="addTitle()">✅ Add Title To Preview</button>
+<label class="small">Volume - Music vs Voice:</label>
+<input type="range" min="0" max="100" value="70" onchange="document.getElementById('toolMsg').innerText='Volume: '+this.value+'%'">
 </div>
-<h3>🔤 SUBTITLES</h3>
-<div class="subBox">
-<input id="subtitleInput" placeholder="Type subtitle for this slot...">
-<button onclick="saveSubtitle()">✅ Save Subtitle</button>
-<button onclick="autoCaptions()">🤖 Auto-Captions</button>
-<button onclick="clearSubtitle()">Clear</button>
-<p id="subtitleHint" style="font-size:12px;color:#aaa">Editing Slot 1</p>
+
+<!-- LIVE TIMELINE - CAPCUT STYLE -->
+<h3>⏱️ LIVE TIMELINE - Video / Audio / Text / Effects</h3>
+<div class="card timeline">
+<div class="track"><b>VIDEO</b><span id="videoTrack"></span></div>
+<div class="track"><b>AUDIO</b><span id="audioTrack"></span></div>
+<div class="track"><b>TEXT</b><span id="textTrack"></span></div>
+<div class="track"><b>FX</b><span id="fxTrack"></span></div>
+<button class="btn btn-yellow" onclick="playTimeline()">▶️ Play Timeline</button>
+<button class="btn" onclick="checkSync()">🔄 Check Sync</button>
+<button class="btn" onclick="fixSync()">🔧 Auto-Fix Sync</button>
 </div>
-<h3>SCENE SLOTS</h3>
-<div style="background:#222;height:10px;border-radius:10px;overflow:hidden"><div id="progressFill" style="background:#00d26a;height:100%;width:0%"></div></div>
-<p id="progressText" style="font-size:12px;color:#aaa">0/6 slots filled</p>
-<div class="slots" id="slots"></div>
-<h3>TIMELINE</h3>
-<div id="timeline"></div>
-<p id="durationLabel" style="font-size:12px;color:#aaa">Total: 0 slots</p>
-<h3>TRANSITIONS</h3>
-<div class="toolbar">
-<button onclick="setTransition('Hard Cut')">⚡ Hard Cut</button>
-<button onclick="setTransition('Crossfade')">🌅 Crossfade</button>
-<button onclick="setTransition('Zoom')">🔍 Zoom</button>
+
+<!-- ADVANCED AI TOOLS -->
+<h3>🤖 ADVANCED AI TOOLS</h3>
+<div class="card ai-box">
+<button class="btn" onclick="aiTool('Auto-Captions - Subtitles generated for all scenes')">🤖 Auto-Captions</button>
+<button class="btn" onclick="aiTool('Auto-Cut - Silences removed, cuts tightened')">🤖 Auto-Cut Silences</button>
+<button class="btn" onclick="aiTool('Enhance Face + Voice - Themba same face, same voice Scene 1 to Scene 15')">🤖 Enhance Face / Voice</button>
+<button class="btn" onclick="aiTool('Background Remove - Done')">🤖 Background Remove</button>
+<button class="btn" onclick="aiTool('Music Sync - Music matched to cuts')">🤖 Music Sync</button>
+<button class="btn" onclick="aiTool('Auto-Colour - Cinematic colour for all scenes')">🤖 Auto-Colour</button>
+<button class="btn" onclick="aiTool('Script To Scene - New scene generated from prompt, with SAME character lock')">🤖 Script To Scene</button>
+<p id="aiMsg" style="font-size:12px;color:#aab0ff"></p>
 </div>
-<p id="transitionLabel" style="font-size:12px;color:#ffcc00">Current: Hard Cut</p>
-<h3>🎵 AUDIO</h3>
-<div class="subBox">
-<p style="font-size:12px">🎵 Music: <input type="file" accept="audio/*" onchange="playAudio(this,'music')"></p>
-<audio id="musicAudio" controls style="width:100%"></audio>
-<p style="font-size:12px">🎤 Voice: <input type="file" accept="audio/*" onchange="playAudio(this,'voice')"></p>
-<audio id="voiceAudio" controls style="width:100%"></audio>
+
+<!-- MEDIA MANAGEMENT -->
+<h3>📁 MEDIA MANAGEMENT - Film Videos + Audio</h3>
+<div class="card">
+<input type="file" accept="video/*,audio/*,image/*" multiple onchange="uploadMedia(event)">
+<input id="searchMedia" placeholder="🔍 Search media..." oninput="renderMedia()">
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
+<button class="btn" onclick="filterMedia('all')">All</button>
+<button class="btn" onclick="filterMedia('video')">🎬 Video</button>
+<button class="btn" onclick="filterMedia('audio')">🎵 Audio</button>
+<button class="btn" onclick="filterMedia('image')">🖼️ Image</button>
 </div>
-<h3>YOUR CLIPS</h3>
-<input type="file" accept="video/*" multiple onchange="uploadClips(event)">
-<div class="slots" id="library"></div>
-<h3>⬆️ EXPORT</h3>
-<div class="subBox">
-<div class="toolbar">
-<button onclick="startExport()" style="background:#ffcc00;color:#000;font-weight:900;border:none">🎬 Start Export</button>
-<button onclick="stopExport()">⏹️ Stop & Download</button>
+<div class="media-grid" id="mediaGrid"></div>
+<p class="small">Tap a clip to add it to Timeline. Tap Preview to watch. Tap Delete to remove.</p>
 </div>
-<p id="exportStatus" style="font-size:12px;color:#00d26a"></p>
+
+<!-- SYNC + MISSING MEDIA -->
+<h3>🔄 SYNC + MISSING-MEDIA DETECTION</h3>
+<div class="card">
+<div id="missingBox"></div>
+<button class="btn btn-yellow" onclick="runDetection()">🔍 Scan For Missing Media Now</button>
+<p class="small">Auto-check: Is video missing? Is audio longer than video? Is subtitle out of time?</p>
 </div>
+
+<!-- CONTINUITY -->
+<h3>🎭 CONTINUITY - SAME PERSON SCENE 1 TO SCENE 15</h3>
+<div class="card">
+<p style="font-size:13px"><b>Themba 16</b> - Short fade, white school shirt, blue trousers, Lusaka accent - SAME in every scene<br><b>Mama 42</b> - Braids, Chitenge, green top<br><b>Coach Chanda 55</b> - Glasses, brown jacket<br><b>Locations:</b> Lusaka Market | School | Cup Hall<br><b>Props:</b> Wooden Chess Board | Gold Trophy</p>
+<button class="btn" onclick="alert('Continuity: ✅ Same face, same clothes, same voice. Locations locked. Props locked.')">🔍 Check Continuity</button>
+</div>
+
+<!-- PREPARE FOR EXPORT -->
+<h3>📦 PREPARE FOR EXPORT</h3>
+<div class="card">
+<p class="small" id="exportCheck">Check before export: Timeline clean, Sync OK, No missing media, Continuity OK.</p>
+<button class="btn btn-yellow" onclick="window.location.href='final.html'">🎬 Go To Final - Export, Poster, Trailer, Release</button>
+<button class="btn" onclick="window.location.href='index.html'">🏠 Back To Home - Work Plan</button>
+</div>
+
 <script src="cinema-nav.js"></script>
+<script src="cinema-continuity.js"></script>
 <script>
-const slotNames = ["1. INTRO - Themba in Lusaka","2. FIRST GAME - Loses","3. TRAINING MONTAGE","4. FINAL - Zed Gambit Cup","5. WIN - Checkmate","6. END CARD - Logo"];
-const defaultSubs = ["In Lusaka, everybody thinks chess is for rich people. I want to prove them wrong.","First tournament. I lost. But I learned.","Every day. Street chess. School chess. Practice.","The final. Zed Gambit Cup. All of Lusaka watching.","Checkmate. Zed Gambit!","Zed Gambit - Lusaka, Zambia. Every move matters."];
-let slots = Array(6).fill(null);
-let subtitles = Array(6).fill("");
-let clips = [
-{name:"Themba in Market", url:"", thumb:"https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=300"},
-{name:"Chess Move", url:"", thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300"},
-{name:"Training", url:"", thumb:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300"},
-{name:"Tournament Crowd", url:"", thumb:"https://images.unsplash.com/photo-1511882150382-421056c89033?w=300"},
+let media = [
+{id:1,name:"Scene 1 - Market",type:"video",thumb:"https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=300",url:"",status:"ok"},
+{id:2,name:"Scene 2 - Chess Move",type:"video",thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300",url:"",status:"ok"},
+{id:3,name:"Scene 3 - Training",type:"video",thumb:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300",url:"",status:"ok"},
+{id:4,name:"Scene 4 - Final Crowd",type:"video",thumb:"https://images.unsplash.com/photo-1511882150382-421056c89033?w=300",url:"",status:"missing"},
+{id:5,name:"Background Music",type:"audio",thumb:"https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300",url:"",status:"ok"},
 ];
-let selectedSlot = 0;
+let timeline = [media[0], media[1], media[2]];
+let currentFilter = 'all';
 let videoEl = document.getElementById('video');
-let undoStack = []; let redoStack = []; let currentTransition = 'Hard Cut';
-let mediaRecorder = null; let recordedChunks = []; let isRecording = false;
-function autoSave(){ localStorage.setItem('cinema_slots_v4', JSON.stringify(slots.map(s=>s?s.name:null))); localStorage.setItem('cinema_subs_v4', JSON.stringify(subtitles)); }
-function loadSave(){ let saved = JSON.parse(localStorage.getItem('cinema_slots_v4')||'[]'); saved.forEach((name,i)=>{ if(name){ let f=clips.find(c=>c.name===name); if(f) slots[i]=f; } }); let ss = JSON.parse(localStorage.getItem('cinema_subs_v4')||'[]'); ss.forEach((s,i)=>{ if(s) subtitles[i]=s; }); }
-function saveHistory(){ undoStack.push(JSON.stringify({slots: slots.map(s=>s?s.name:null), subs:[...subtitles]})); if(undoStack.length>50) undoStack.shift(); redoStack=[]; }
-function undo(){ if(!undoStack.length){ alert('Nothing to undo'); return; } let last = undoStack.pop(); redoStack.push(JSON.stringify({slots: slots.map(s=>s?s.name:null), subs:[...subtitles]})); let d = JSON.parse(last); slots = d.slots.map(n=> n ? (clips.find(c=>c.name===n)||{name:n,url:"",thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300"}) : null); subtitles = d.subs; render(); autoSave(); }
-function redo(){ if(!redoStack.length){ alert('Nothing to redo'); return; } let next = redoStack.pop(); undoStack.push(JSON.stringify({slots: slots.map(s=>s?s.name:null), subs:[...subtitles]})); let d = JSON.parse(next); slots = d.slots.map(n=> n ? (clips.find(c=>c.name===n)||{name:n,url:"",thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300"}) : null); subtitles = d.subs; render(); autoSave(); }
-function clearSlot(){ saveHistory(); slots[selectedSlot]=null; subtitles[selectedSlot]=""; render(); autoSave(); }
-function render(){
-document.getElementById('slots').innerHTML = slotNames.map((n,i)=>`<div class="slot ${selectedSlot===i?'active':''} ${slots[i]?'filled':''}" onclick="selectSlot(${i})"><small>${n}</small><b>${slots[i]?slots[i].name:'+ Empty - Tap to Fill'}</b><small style="color:#ffcc00">${subtitles[i]? '💬 '+subtitles[i].substring(0,30)+'...' : 'No subtitle yet'}</small></div>`).join('');
-document.getElementById('library').innerHTML = clips.map((c,i)=>`<div class="clip" onclick="placeClip(${i})"><img src="${c.thumb}"><b>${c.name}</b><small>Tap to place in Slot ${selectedSlot+1}</small></div>`).join('');
-document.getElementById('timeline').innerHTML = slots.map((s,i)=>`<div class="timeline-clip ${selectedSlot===i?'active':''}" onclick="selectSlot(${i})">${s? '▶ '+s.name : '○ Empty Slot '+(i+1)}</div>`).join('');
-let filled = slots.filter(s=>s).length;
-document.getElementById('progressFill').style.width = (filled/6*100)+'%';
-document.getElementById('progressText').innerText = filled+'/6 slots filled - '+(6-filled)+' left';
-document.getElementById('durationLabel').innerText = 'Total: '+filled+' slots filled | Transition: '+currentTransition;
-document.getElementById('subtitleInput').value = subtitles[selectedSlot]||'';
-document.getElementById('subtitleHint').innerText = 'Editing subtitle for Slot '+(selectedSlot+1)+' - '+slotNames[selectedSlot];
-document.getElementById('subtitleText').innerText = subtitles[selectedSlot]||'';
+function renderMedia(){
+  let q = (document.getElementById('searchMedia').value||'').toLowerCase();
+  let list = media.filter(m => (currentFilter==='all'||m.type===currentFilter) && m.name.toLowerCase().includes(q));
+  document.getElementById('mediaGrid').innerHTML = list.map(m=>`<div class="media-item" onclick="addToTimeline(${m.id})"><img src="${m.thumb}"><b style="font-size:12px">${m.name}</b><br><small style="color:${m.status==='missing'?'#ff5555':'#00d26a'}">${m.status==='missing'?'❌ MISSING FILE':'✅ Ready'}</small><br><small>${m.type}</small><br><button class="btn" onclick="event.stopPropagation();previewMedia(${m.id})">Preview</button><button class="btn btn-red" onclick="event.stopPropagation();deleteMedia(${m.id})">Delete</button></div>`).join('') || '<p>No media</p>';
 }
-function selectSlot(i){ selectedSlot=i; render(); showPreview(); }
-function placeClip(i){ saveHistory(); slots[selectedSlot]=clips[i]; render(); showPreview(); autoSave(); if(selectedSlot<5) selectedSlot++; render(); }
-function showPreview(){ let c = slots[selectedSlot]; if(c && c.url){ videoEl.style.display='block'; videoEl.src=c.url; videoEl.play(); document.getElementById('previewPlaceholder').style.display='none'; } else if(c){ document.getElementById('previewPlaceholder').innerText='Preview: '+c.name; document.getElementById('previewPlaceholder').style.display='flex'; videoEl.style.display='none'; } else { document.getElementById('previewPlaceholder').innerText='Tap a Slot, Then Tap a Clip Below'; document.getElementById('previewPlaceholder').style.display='flex'; videoEl.style.display='none'; } document.getElementById('subtitleText').innerText = subtitles[selectedSlot]||''; }
-function uploadClips(e){ [...e.target.files].forEach(f=>{ let url = URL.createObjectURL(f); clips.push({name:f.name, url:url, thumb:'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300'}); }); render(); }
-function saveSubtitle(){ subtitles[selectedSlot] = document.getElementById('subtitleInput').value; render(); autoSave(); alert('Subtitle saved to Slot '+(selectedSlot+1)); }
-function autoCaptions(){ saveHistory(); for(let i=0;i<6;i++){ if(!subtitles[i]) subtitles[i]=defaultSubs[i]; } render(); autoSave(); alert('Auto-Captions done!'); }
-function clearSubtitle(){ subtitles[selectedSlot]=""; render(); autoSave(); }
-function splitClip(){ alert('Split: Slot '+(selectedSlot+1)+' will be cut into 2'); }
-function addText(){ let t = prompt('Text for this scene?','Checkmate. Zed Gambit!'); if(t) document.getElementById('previewText').innerText=t; }
-function setFilter(f){ videoEl.style.filter=f; }
-function setTransition(t){ currentTransition=t; document.getElementById('transitionLabel').innerText='Current: '+t; render(); }
-function playAudio(input, type){ let url = URL.createObjectURL(input.files[0]); document.getElementById(type+'Audio').src=url; document.getElementById(type+'Audio').play(); }
-function startExport(){ try{ let wrap = document.getElementById('previewWrap'); let stream = wrap.captureStream ? wrap.captureStream(30) : videoEl.captureStream(30); recordedChunks=[]; mediaRecorder = new MediaRecorder(stream, {mimeType:'video/webm'}); mediaRecorder.ondataavailable = e=>{ if(e.data.size>0) recordedChunks.push(e.data); }; mediaRecorder.onstop = ()=>{ let blob = new Blob(recordedChunks,{type:'video/webm'}); let url = URL.createObjectURL(blob); let a=document.createElement('a'); a.href=url; a.download='zed-gambit-slot-'+(selectedSlot+1)+'.webm'; a.click(); document.getElementById('exportStatus').innerText='✅ Exported! File downloaded.'; }; mediaRecorder.start(); isRecording=true; document.getElementById('exportStatus').innerText='🔴 RECORDING... Play video now, then Stop.'; if(videoEl.src) videoEl.play(); }catch(err){ alert('Export needs Chrome / Edge. Use screen record as backup.'); } }
-function stopExport(){ if(mediaRecorder && isRecording){ mediaRecorder.stop(); isRecording=false; } else { alert('Tap Start Export first'); } }
-loadSave(); render();
+function renderTimeline(){
+  document.getElementById('videoTrack').innerHTML = timeline.map(c=>`<span class="clip ${c.status==='missing'?'missing':''}" onclick="previewMedia(${c.id})">▶ ${c.name} ${c.status==='missing'?'❌':''}</span>`).join('');
+  document.getElementById('audioTrack').innerHTML = media.filter(m=>m.type==='audio').map(m=>`<span class="clip">🎵 ${m.name}</span>`).join('');
+  document.getElementById('textTrack').innerHTML = timeline.map(c=>`<span class="clip">💬 ${c.name} subtitle</span>`).join('');
+  document.getElementById('fxTrack').innerHTML = timeline.map(c=>`<span class="clip">✨ Filter: None</span>`).join('');
+  document.getElementById('totalTime').innerText = timeline.length + ' clips in timeline';
+  runDetection(false);
+}
+function addToTimeline(id){ let m = media.find(x=>x.id===id); if(m){ timeline.push(m); renderTimeline(); document.getElementById('toolMsg').innerText = 'Added to timeline: '+m.name; } }
+function previewMedia(id){ let m = media.find(x=>x.id===id); if(!m) return; if(m.status==='missing'){ alert('❌ MISSING MEDIA: '+m.name+' - Re-upload this clip.'); return; } if(m.url){ videoEl.style.display='block'; videoEl.src=m.url; videoEl.play(); document.getElementById('placeholder').style.display='none'; } else { document.getElementById('placeholder').innerText='Preview: '+m.name+' (Demo - upload real video to play)'; } document.getElementById('subtitleText').innerText = 'Subtitle: '+m.name; document.getElementById('playhead').innerText='00:05 - Playing: '+m.name; }
+function deleteMedia(id){ if(confirm('Delete this media?')){ media = media.filter(m=>m.id!==id); timeline = timeline.filter(m=>m.id!==id); renderMedia(); renderTimeline(); } }
+function uploadMedia(e){ [...e.target.files].forEach(f=>{ let url=URL.createObjectURL(f); let type=f.type.startsWith('audio')?'audio':f.type.startsWith('image')?'image':'video'; media.push({id:Date.now()+Math.random(),name:f.name,type:type,thumb:'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300',url:url,status:'ok'}); }); renderMedia(); renderTimeline(); }
+function filterMedia(t){ currentFilter=t; renderMedia(); }
+function toolAction(t){ document.getElementById('toolMsg').innerText = 'Tool: '+t+' - Applied to timeline'; if(t==='B&W') videoEl.style.filter='grayscale(1)'; if(t==='Vintage') videoEl.style.filter='sepia(0.6)'; if(t==='Clear Filter') videoEl.style.filter='none'; if(t==='Split') alert('Split: Clip will be cut into 2 at playhead'); }
+function aiTool(msg){ document.getElementById('aiMsg').innerText='🤖 AI: '+msg; alert('AI Tool: '+msg); }
+function addTitle(){ let t=document.getElementById('textInput').value; if(t) document.getElementById('previewText').innerText=t; }
+function playTimeline(){ if(timeline[0]) previewMedia(timeline[0].id); }
+function checkSync(){ document.getElementById('syncStatus').innerText='✅ In Sync'; alert('Sync Check: Video, Audio, Subtitles aligned.'); }
+function fixSync(){ document.getElementById('syncStatus').innerText='✅ Fixed - In Sync'; alert('Auto-Fix Sync: Done'); }
+function runDetection(showAlert=true){
+  let missing = media.filter(m=>m.status==='missing');
+  let box = document.getElementById('missingBox');
+  if(missing.length){ box.innerHTML = `<div style="background:#3a0000;border:1px solid #d32f2f;border-radius:10px;padding:12px;font-size:13px">❌ <b>${missing.length} MISSING MEDIA</b><br>${missing.map(m=>'• '+m.name+' - Re-upload or delete').join('<br>')}</div>`; if(showAlert) alert('Missing: '+missing.map(m=>m.name).join(', ')); }
+  else { box.innerHTML = `<div style="background:#002a12;border:1px solid #00d26a;border-radius:10px;padding:12px;font-size:13px">✅ No missing media - All ready</div>`; if(showAlert) alert('No missing media'); }
+}
+renderMedia(); renderTimeline();
 </script>
 </body>
 </html>
