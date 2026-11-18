@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cinema - Final Movie & Release</title>
+<style>
+body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
+h1{font-size:22px} p{color:#aaa;font-size:14px}
+.card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
+.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px;border:none;width:100%;cursor:pointer;font-size:15px}
+.btn-gray{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px;border:none;width:100%;cursor:pointer}
+.btn-small{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;margin:4px;cursor:pointer}
+input,select,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
+.poster{width:100%;aspect-ratio:2/3;background:linear-gradient(180deg,#111,#333);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;box-sizing:border-box}
+.check{font-size:13px;padding:10px;background:#222;border-radius:8px;margin:6px 0}
+.check.ok{border-left:4px solid #00d26a}
+.check.bad{border-left:4px solid #d32f2f}
+.small{font-size:12px;color:#aaa}
+.trailer{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px}
+</style>
+</head>
+<body>
+<h1>🎬 CINEMA - FINAL MOVIE & RELEASE</h1>
+<p>Zed Gambit - 1 Work Plan = 1 Movie - Step 5 Prepare For Export</p>
+
+<!-- PREPARE FOR EXPORT - CHECKLIST -->
+<div class="card">
+<h2 style="margin:0">📦 PREPARE FOR EXPORT - Final Check</h2>
+<p class="small">Must be all green before you export. If RED, fix it in Editor.</p>
+<div id="checkList"></div>
+<button class="btn-small" onclick="runFinalCheck()">🔍 Run Final Check Again</button>
+<p class="small" id="finalReady"></p>
+</div>
+
+<!-- RENDER + EXPORT -->
+<div class="card">
+<h2 style="margin:0">🎬 RENDER + EXPORT</h2>
+<p class="small">Rendering = Combine all scenes into ONE movie file.</p>
+<select id="quality">
+<option>🎬 1080p Full HD - Best for YouTube / Sharing</option>
+<option>📱 720p HD - Best for WhatsApp / Phone</option>
+<option>🎞️ 4K Ultra HD - Best for Cinema</option>
+</select>
+<select id="format">
+<option>MP4 - Works Everywhere</option>
+<option>Vertical 9:16 - TikTok / Reels / Shorts</option>
+<option>Square 1:1 - Facebook / Instagram</option>
+</select>
+<div id="renderBar" style="background:#222;height:14px;border-radius:10px;overflow:hidden;margin:10px 0"><div id="renderFill" style="background:#ffcc00;height:100%;width:0%"></div></div>
+<p class="small" id="renderMsg">Ready to render.</p>
+<button class="btn" onclick="renderMovie()">🎬 RENDER FINAL MOVIE</button>
+<button class="btn-gray" onclick="exportMovie()">⬆️ EXPORT / DOWNLOAD MOVIE</button>
+<button class="btn-gray" onclick="alert('Exported to Profile - Your movie is now on your Profile page')">📤 Export To Profile</button>
+</div>
+
+<!-- POSTER -->
+<div class="card">
+<h2 style="margin:0">🖼️ POSTER</h2>
+<p class="small">Poster from your Final scene. Use for YouTube, WhatsApp, Cinema.</p>
+<div class="poster" id="posterPreview">
+<div style="font-size:40px">🎬</div>
+<h2 style="margin:6px 0" id="posterTitle">ZED GAMBIT</h2>
+<p style="font-size:13px;color:#fff" id="posterSub">A Brave Boy. One Chess Board. Lusaka.</p>
+<p style="font-size:11px;color:#ffcc00">THEMBA • MAMA • COACH CHANDA<br>LUSAKA • ZAMBIA</p>
+</div>
+<input id="posterTitleInput" placeholder="Poster Title - Zed Gambit" oninput="document.getElementById('posterTitle').innerText=this.value||'ZED GAMBIT'">
+<textarea id="posterSubInput" rows="2" placeholder="Poster tagline..." oninput="document.getElementById('posterSub').innerText=this.value||'A Brave Boy. One Chess Board. Lusaka.'"></textarea>
+<button class="btn-small" onclick="alert('Poster Saved - Download screenshot of poster above')">💾 Save Poster</button>
+<button class="btn-small" onclick="document.getElementById('posterTitle').innerText='ZED GAMBIT';document.getElementById('posterSub').innerText='A Brave Boy. One Chess Board. Lusaka.'">↩️ Reset Poster</button>
+</div>
+
+<!-- TRAILER -->
+<div class="card">
+<h2 style="margin:0">🎞️ TRAILER - 30 Sec</h2>
+<p class="small">Trailer = Scene 1 Intro + Scene 3 Training + Scene 4 Final + Scene 5 Checkmate</p>
+<div class="trailer" id="trailerPreview">▶️ Trailer Preview - Tap Play To Preview</div>
+<button class="btn-small" onclick="playTrailer()">▶️ Play Trailer</button>
+<button class="btn-small" onclick="alert('Trailer Created: 30 sec - Intro + Training + Final + Checkmate - Ready to share')">✨ Generate Trailer</button>
+<button class="btn-small" onclick="alert('Trailer Exported - Ready for TikTok / Reels / YouTube Shorts')">⬆️ Export Trailer</button>
+</div>
+
+<!-- DISTRIBUTION -->
+<div class="card">
+<h2 style="margin:0">🌍 DISTRIBUTION - Release Your Movie</h2>
+<p class="small">Where do you want to release Zed Gambit?</p>
+<button class="btn-gray" onclick="alert('Shared to Profile - Your followers can watch it now')">👤 Publish To Profile</button>
+<button class="btn-gray" onclick="alert('Link Copied - Share on WhatsApp, Facebook, TikTok')">🔗 Copy Share Link</button>
+<button class="btn-gray" onclick="alert('Ready for YouTube - Title: Zed Gambit | Description: Lusaka chess movie')">▶️ YouTube</button>
+<button class="btn-gray" onclick="alert('Ready for TikTok / Reels - Vertical trailer ready')">📱 TikTok / Reels</button>
+<button class="btn-gray" onclick="alert('Ready for WhatsApp - 720p file ready to send')">💬 WhatsApp</button>
+</div>
+
+<!-- CONTINUITY FINAL CHECK -->
+<div class="card">
+<h2 style="margin:0">🎭 CONTINUITY - Final Check</h2>
+<p style="font-size:13px">Themba 16 - Short fade, white school shirt, blue trousers, Lusaka accent - SAME Scene 1 to Scene 15<br>Mama 42 - Braids, Chitenge. Coach 55 - Glasses, brown jacket.<br>Locations: Lusaka Market | School | Cup Hall - Locked.<br>Props: Wooden Chess Board | Gold Trophy - Locked.</p>
+<button class="btn-small" onclick="alert('Continuity Final: ✅ Same face, same age, same hair, same clothes, same voice. No location jump. No prop change.')">🔍 Final Continuity Check</button>
+<button class="btn-gray" onclick="window.location.href='index.html'">🏠 Back To Home - Work Plan</button>
+<button class="btn-gray" onclick="window.location.href='editor.html'">✂️ Back To Mixing Studio</button>
+</div>
+
+<script src="cinema-nav.js"></script>
+<script src="cinema-continuity.js"></script>
+<script>
+function runFinalCheck(){
+  let checks = [
+    {label:'✅ Movie Idea - Done', ok:true},
+    {label:'✅ Screenplay - Shots & Scenes Generated', ok:true},
+    {label:'⚠️ Scenes - 1 Video Missing (Scene 4 - Final Crowd) - Fix in Editor', ok:false},
+    {label:'✅ Audio - Music + Voice Uploaded', ok:true},
+    {label:'✅ Sync - Video + Audio + Subtitles In Sync', ok:true},
+    {label:'✅ Continuity - Same Face, Clothes, Voice Scene 1 to Scene 15', ok:true},
+  ];
+  document.getElementById('checkList').innerHTML = checks.map(c=>`<div class="check ${c.ok?'ok':'bad'}">${c.label}</div>`).join('');
+  document.getElementById('finalReady').innerText = 'Fix the 1 RED item, then you can Render. Everything else is GREEN.';
+}
+function renderMovie(){
+  let fill = document.getElementById('renderFill');
+  let msg = document.getElementById('renderMsg');
+  let w = 0;
+  msg.innerText = 'Rendering... Combining all scenes into ONE movie...';
+  let t = setInterval(()=>{
+    w += 10;
+    fill.style.width = w + '%';
+    if(w>=100){ clearInterval(t); msg.innerText='✅ Render Done - Final Movie Ready - Tap Export / Download'; alert('Render Done - Zed Gambit Final Movie Ready!'); }
+  }, 300);
+}
+function exportMovie(){
+  alert('Exporting... Downloading Zed Gambit - ' + document.getElementById('quality').value + ' - ' + document.getElementById('format').value);
+}
+function playTrailer(){
+  document.getElementById('trailerPreview').innerText = '▶️ Playing Trailer: Intro (5s) -> Training (10s) -> Final (10s) -> Checkmate (5s) -> ZED GAMBIT LOGO';
+}
+runFinalCheck();
+</script>
+</body>
+</html>
+
+
