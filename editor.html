@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - Mixing Studio</title>
+<title>Cinema - 4 Mixing Studio</title>
 <style>
 body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
 h1{font-size:20px} h3{font-size:14px;color:#ffcc00;margin:18px 0 8px}
@@ -12,7 +12,7 @@ h1{font-size:20px} h3{font-size:14px;color:#ffcc00;margin:18px 0 8px}
 .btn{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;margin:4px;cursor:pointer}
 .btn-yellow{background:#ffcc00;color:#000;font-weight:900;border:none}
 .btn-red{background:#d32f2f;color:#fff;border:none}
-input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
+input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
 #preview{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px solid #222}
 #preview video{width:100%;height:100%;object-fit:cover;display:none}
 #previewText{position:absolute;top:12px;left:0;right:0;text-align:center;font-weight:900;font-size:22px;text-shadow:2px 2px 0 #000}
@@ -21,18 +21,18 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 .track{display:flex;gap:6px;overflow-x:auto;padding:6px 0;border-bottom:1px solid #222;align-items:center}
 .track b{font-size:11px;color:#aaa;min-width:55px}
 .clip{background:#333;padding:10px 12px;border-radius:8px;font-size:12px;white-space:nowrap;cursor:pointer}
-.clip.active{background:#ffcc00;color:#000}
 .clip.missing{background:#d32f2f;color:#fff}
 .media-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .media-item{background:#222;border-radius:8px;padding:8px;cursor:pointer}
 .media-item img{width:100%;border-radius:6px}
 .ai-box{background:#1a1a2e;border:1px solid #4a4aff;border-radius:10px;padding:12px}
 .small{font-size:12px;color:#aaa}
+.navbtn{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
 </style>
 </head>
 <body>
-<h1>✂️ CINEMA - MIXING STUDIO</h1>
-<p class="small">Zed Gambit - Professional Mixing - Live Like CapCut - 1 Movie = 1 Work Plan</p>
+<h1>4 - MIXING STUDIO</h1>
+<p class="small">Zed Gambit - Professional Mixing Studio - Live Timeline - Dedicated Page</p>
 
 <!-- LIVE PREVIEW -->
 <div id="preview">
@@ -43,7 +43,7 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 </div>
 <p class="small">Playhead: <span id="playhead">00:00</span> | Duration: <span id="totalTime">0 clips</span> | Sync: <span id="syncStatus" style="color:#00d26a">✅ In Sync</span></p>
 
-<!-- EDITING TOOLS - CAPCUT STYLE -->
+<!-- EDITING TOOLS -->
 <h3>✂️ EDITING TOOLS</h3>
 <div class="card">
 <button class="btn" onclick="toolAction('Trim')">✂️ Trim</button>
@@ -64,7 +64,7 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 <input type="range" min="0" max="100" value="70" onchange="document.getElementById('toolMsg').innerText='Volume: '+this.value+'%'">
 </div>
 
-<!-- LIVE TIMELINE - CAPCUT STYLE -->
+<!-- LIVE TIMELINE -->
 <h3>⏱️ LIVE TIMELINE - Video / Audio / Text / Effects</h3>
 <div class="card timeline">
 <div class="track"><b>VIDEO</b><span id="videoTrack"></span></div>
@@ -80,7 +80,7 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 <h3>🤖 ADVANCED AI TOOLS</h3>
 <div class="card ai-box">
 <button class="btn" onclick="aiTool('Auto-Captions - Subtitles generated for all scenes')">🤖 Auto-Captions</button>
-<button class="btn" onclick="aiTool('Auto-Cut - Silences removed, cuts tightened')">🤖 Auto-Cut Silences</button>
+<button class="btn" onclick="aiTool('Auto-Cut - Silences removed, cuts tightened')">🤖 Auto-Cut</button>
 <button class="btn" onclick="aiTool('Enhance Face + Voice - Themba same face, same voice Scene 1 to Scene 15')">🤖 Enhance Face / Voice</button>
 <button class="btn" onclick="aiTool('Background Remove - Done')">🤖 Background Remove</button>
 <button class="btn" onclick="aiTool('Music Sync - Music matched to cuts')">🤖 Music Sync</button>
@@ -112,19 +112,12 @@ input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid
 <p class="small">Auto-check: Is video missing? Is audio longer than video? Is subtitle out of time?</p>
 </div>
 
-<!-- CONTINUITY -->
-<h3>🎭 CONTINUITY - SAME PERSON SCENE 1 TO SCENE 15</h3>
+<!-- PAGE NAVIGATION -->
 <div class="card">
-<p style="font-size:13px"><b>Themba 16</b> - Short fade, white school shirt, blue trousers, Lusaka accent - SAME in every scene<br><b>Mama 42</b> - Braids, Chitenge, green top<br><b>Coach Chanda 55</b> - Glasses, brown jacket<br><b>Locations:</b> Lusaka Market | School | Cup Hall<br><b>Props:</b> Wooden Chess Board | Gold Trophy</p>
-<button class="btn" onclick="alert('Continuity: ✅ Same face, same clothes, same voice. Locations locked. Props locked.')">🔍 Check Continuity</button>
-</div>
-
-<!-- PREPARE FOR EXPORT -->
-<h3>📦 PREPARE FOR EXPORT</h3>
-<div class="card">
-<p class="small" id="exportCheck">Check before export: Timeline clean, Sync OK, No missing media, Continuity OK.</p>
-<button class="btn btn-yellow" onclick="window.location.href='final.html'">🎬 Go To Final - Export, Poster, Trailer, Release</button>
-<button class="btn" onclick="window.location.href='index.html'">🏠 Back To Home - Work Plan</button>
+<a href="scenes.html" class="navbtn">← Back To 3 - Scenes</a>
+<a href="final.html" class="navbtn" style="background:#ffcc00;color:#000;font-weight:900">Next → 5 - Final - Prepare For Export</a>
+<a href="continuity.html" class="navbtn">→ 6 - Continuity</a>
+<a href="index.html" class="navbtn">🏠 Home - Work Plan</a>
 </div>
 
 <script src="cinema-nav.js"></script>
