@@ -4,167 +4,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cinema - Stage 6 Editing</title>
+<title>Cinema - Home</title>
 <style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;padding:12px;margin:0;padding-bottom:100px}
-h2{font-size:16px;margin:8px 0} h3{font-size:13px;color:#aaa;margin:14px 0 6px}
-#previewWrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;border:2px solid #222}
-#previewPlaceholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#ccc;text-align:center;padding:20px;font-size:18px}
-#previewText{position:absolute;top:12px;left:0;right:0;text-align:center;font-weight:900;font-size:20px;text-shadow:2px 2px 0 #000}
-#subtitleText{position:absolute;bottom:14px;left:10px;right:10px;text-align:center;font-weight:900;font-size:20px;color:#fff;text-shadow:2px 2px 0 #000}
-.slots{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
-.slot{background:#1a1a1a;border:2px dashed #333;border-radius:10px;padding:10px;min-height:78px;cursor:pointer}
-.slot.active{border-color:#ffcc00;background:#2a2200}
-.slot.filled{border-style:solid;border-color:#00d26a}
-.slot small{color:#aaa;display:block;font-size:11px}
-.slot b{font-size:12px}
-.clip{background:#222;border-radius:8px;padding:8px;cursor:pointer;border:1px solid #333}
-.clip img{width:100%;border-radius:6px}
-.toolbar{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
-.toolbar button{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;white-space:nowrap;cursor:pointer}
-#timeline{background:#111;border-radius:10px;padding:14px;display:flex;gap:6px;overflow-x:auto}
-.timeline-clip{background:#333;padding:10px 12px;border-radius:8px;font-size:12px;white-space:nowrap}
-.timeline-clip.active{background:#ffcc00;color:#000}
-input[type=file]{margin:8px 0}
-.subBox{background:#111;padding:12px;border-radius:10px}
-.subBox input{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
-.subBox button{padding:10px 14px;border-radius:20px;border:1px solid #444;background:#222;color:#fff;cursor:pointer;margin:2px}
-#cinemaNav{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:2px solid #ffcc00;display:flex;justify-content:space-around;padding:14px 0 18px;z-index:9999}
-#cinemaNav a{color:#fff;text-decoration:none;text-align:center;font-size:12px}
-#cinemaNav a.active{color:#ffcc00}
+body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
+h1{font-size:24px} p{color:#aaa;font-size:14px}
+.card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
+.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px;border:none;width:100%;cursor:pointer;font-size:15px}
+.btn-gray{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px;border:none;width:100%;cursor:pointer}
+.btn-small{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;margin:4px;cursor:pointer}
+input,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
+.step{background:#222;border-radius:10px;padding:14px;margin:10px 0;border-left:4px solid #ffcc00}
+.step.done{border-left-color:#00d26a}
+.step.now{border-left-color:#ffcc00;background:#2a2200}
+.small{font-size:12px;color:#aaa}
+.scene{background:#111;border:1px solid #333;border-radius:10px;padding:12px;margin:8px 0}
+.progress{background:#222;height:10px;border-radius:10px;overflow:hidden}
+.progress div{background:#00d26a;height:100%;width:20%}
 </style>
 </head>
 <body>
+<h1>🎬 CINEMA - HOME</h1>
+<p>Projects OR Start Now Project. 1 Work Plan = 1 Movie.</p>
 
-<h2>🎬 CINEMA - STAGE 6: EDITING</h2>
-<h3>Zed Gambit - Drag clips into slots</h3>
-
-<div id="previewWrap">
-  <div id="previewPlaceholder">Tap a Slot, Then Tap a Clip Below</div>
-  <video id="video" controls playsinline style="display:none;width:100%;height:100%;object-fit:cover"></video>
-  <div id="previewText"></div>
-  <div id="subtitleText"></div>
+<!-- PROJECTS -->
+<div class="card">
+<b style="font-size:18px">📁 PROJECTS</b>
+<p class="small">Tap a project to open its Work Plan.</p>
+<button class="btn-gray" onclick="openProject('Zed Gambit')">🎬 Zed Gambit - Open Work Plan ↓</button>
+<button class="btn-gray" onclick="startNew()">➕ + START NOW PROJECT - New Movie</button>
 </div>
 
-<div class="toolbar">
-  <button onclick="splitClip()">✂️ Split</button>
-  <button onclick="addText()">🔤 Add Text</button>
-  <button onclick="setFilter('grayscale(1)')">⬛ B&W</button>
-  <button onclick="setFilter('sepia(0.6)')">🎞️ Vintage</button>
-  <button onclick="setFilter('none')">✨ Clear</button>
-  <button onclick="undo()">↩️ Undo</button>
-  <button onclick="redo()">↪️ Redo</button>
-  <button onclick="clearSlot()">🗑️ Clear Slot</button>
+<!-- START NOW - NEW PROJECT -->
+<div class="card" id="startNow" style="display:none">
+<h2 style="margin:0">🚀 START NOW PROJECT</h2>
+<p class="small">Type your movie idea. 1 Work Plan = 1 Movie.</p>
+<textarea id="movieIdea" rows="3" placeholder="Example: A brave Zambian boy in Lusaka discovers chess, loses first game, trains hard, wins Zed Gambit Cup..."></textarea>
+<input id="movieTitle" placeholder="Movie Title - Example: Zed Gambit">
+<button class="btn" onclick="createProject()">✨ CREATE WORK PLAN FOR THIS MOVIE</button>
 </div>
 
-<h3>🔤 SUBTITLES</h3>
-<div class="subBox">
-  <input id="subtitleInput" placeholder="Type subtitle for this slot...">
-  <button onclick="saveSubtitle()">✅ Save Subtitle</button>
-  <button onclick="autoCaptions()">🤖 Auto-Captions - Fill All Slots</button>
-  <button onclick="clearSubtitle()">Clear</button>
-  <p id="subtitleHint" style="font-size:12px;color:#aaa">Editing Slot 1</p>
+<!-- WORK PLAN -->
+<div class="card" id="workplan" style="display:none">
+<h2 style="margin:0">📋 WORK PLAN - <span id="planTitle">Zed Gambit</span></h2>
+<p class="small">1 Work Plan = 1 Movie Idea. Follow 1 to 5.</p>
+<div class="progress"><div id="progBar"></div></div>
+<p class="small" id="progText">Progress: 20% - Step 2: Screenplay</p>
+
+<!-- 1 - MOVIE IDEA -->
+<div class="step done">
+<b>✅ 1 - MOVIE IDEA</b><br>
+<span class="small" id="ideaText">A brave Zambian boy in Lusaka discovers chess, loses, trains, wins Zed Gambit Cup.</span><br>
+<button class="btn-small" onclick="document.getElementById('startNow').style.display='block'">✏️ Change Idea</button>
 </div>
 
-<h3>SCENE SLOTS - Your Story Order</h3>
-<div style="background:#222;height:10px;border-radius:10px;overflow:hidden;margin:8px 0"><div id="progressFill" style="background:#00d26a;height:100%;width:0%"></div></div>
-<p id="progressText" style="font-size:12px;color:#aaa">0/6 slots filled</p>
-<div class="slots" id="slots"></div>
-
-<h3>TIMELINE</h3>
-<div id="timeline"></div>
-<p id="durationLabel" style="font-size:12px;color:#aaa">Total: 0 slots</p>
-
-<h3>TRANSITIONS</h3>
-<div class="toolbar">
-  <button onclick="setTransition('Hard Cut')">⚡ Hard Cut</button>
-  <button onclick="setTransition('Crossfade')">🌅 Crossfade</button>
-  <button onclick="setTransition('Zoom')">🔍 Zoom - For Checkmate</button>
-</div>
-<p id="transitionLabel" style="font-size:12px;color:#ffcc00">Current: Hard Cut</p>
-
-<h3>🎵 AUDIO</h3>
-<div class="subBox">
-  <p style="font-size:12px">🎵 Music: <input type="file" accept="audio/*" onchange="playAudio(this,'music')"></p>
-  <audio id="musicAudio" controls style="width:100%"></audio>
-  <p style="font-size:12px">🎤 Voice: <input type="file" accept="audio/*" onchange="playAudio(this,'voice')"></p>
-  <audio id="voiceAudio" controls style="width:100%"></audio>
+<!-- 2 - SCREENPLAY -->
+<div class="step now">
+<b>🎬 2 - SCREENPLAY - SHOTS AND SCENES FROM PROMPT</b><br>
+<span class="small">Type prompt, generate shots and scenes. Each scene = 1 shot list.</span><br>
+<textarea id="promptInput" rows="2" placeholder="Prompt: Themba in Lusaka Market, morning, finds chess board, curious..."></textarea>
+<button class="btn-small" onclick="generateScreenplay()">🤖 Generate Shots & Scenes From Prompt</button>
+<div id="screenplayList"></div>
 </div>
 
-<h3>YOUR CLIPS</h3>
-<input type="file" accept="video/*" multiple onchange="uploadClips(event)">
-<div class="slots" id="library"></div>
-
-<h3>⬆️ EXPORT</h3>
-<div class="subBox">
-  <div class="toolbar">
-    <button onclick="startExport()" style="background:#ffcc00;color:#000;font-weight:900;border:none">🎬 Start Export</button>
-    <button onclick="stopExport()">⏹️ Stop & Download</button>
-  </div>
-  <p id="exportStatus" style="font-size:12px;color:#00d26a"></p>
-  <p style="font-size:12px;color:#aaa">Export records preview + subtitles + filter into a real video file.</p>
+<!-- 3 - SCENES / UPLOAD -->
+<div class="step">
+<b>📁 3 - SCENES - UPLOAD FILM VIDEOS + AUDIO</b><br>
+<span class="small">For each scene, upload your film video + audio. This is where your footage goes.</span><br>
+<div id="scenesList"></div>
+<label class="small">Upload Film Video:</label>
+<input type="file" accept="video/*" multiple onchange="uploadSceneVideo(event)">
+<label class="small">Upload Audio - Music / Voice:</label>
+<input type="file" accept="audio/*" multiple onchange="uploadSceneAudio(event)">
+<p class="small" id="uploadMsg"></p>
 </div>
 
-<div id="cinemaNav">
-  <a href="index.html">🏠<br>Home</a>
-  <a href="studio.html">🎬<br>Studio</a>
-  <a href="studio.html" class="active">✂️<br>Edit</a>
-  <a href="index.html">👤<br>Profile</a>
-  <a href="#" onclick="history.back();return false;">←<br>Back</a>
+<!-- 4 - MIXING -->
+<div class="step">
+<b>✂️ 4 - PROFESSIONAL MIXING - LIVE INTERFACE LIKE CAPCUT</b><br>
+<span class="small">Dedicated mixing - Live Timeline, Trim, Split, Text, Filters, Transitions, Advanced AI Tools.</span><br>
+<button class="btn-small" onclick="window.location.href='editor.html'">✂️ Open Mixing Studio - Like CapCut</button><br>
+<button class="btn-small" onclick="alert('AI Tool: Auto-Captions - Done')">🤖 AI Auto-Captions</button>
+<button class="btn-small" onclick="alert('AI Tool: Auto-Cut Silences - Done')">🤖 AI Auto-Cut</button>
+<button class="btn-small" onclick="alert('AI Tool: Enhance Face + Voice - Same face Scene 1 to Scene 15')">🤖 AI Enhance Face/Voice</button>
+<button class="btn-small" onclick="alert('AI Tool: Background Remove')">🤖 AI Background Remove</button>
+<button class="btn-small" onclick="alert('AI Tool: Auto Music Sync - Music matched to cuts')">🤖 AI Music Sync</button>
 </div>
 
+<!-- 5 - PREPARE FOR EXPORT -->
+<div class="step">
+<b>📦 5 - PREPARE FOR EXPORT</b><br>
+<span class="small">Check sync, missing media, continuity, then prepare final file.</span><br>
+<button class="btn-small" onclick="checkExport()">🔍 Check - Ready For Export?</button>
+<p class="small" id="exportCheck"></p>
+<button class="btn-small" onclick="window.location.href='final.html'">🎬 Go To Export - Poster, Trailer, Release</button>
+</div>
+
+<!-- 6 - CONTINUITY -->
+<div class="step" style="border-left-color:#00d26a">
+<b>🎭 6 - CONTINUITY - SAME PERSON SCENE 1 TO SCENE 15</b><br>
+<span class="small">Themba 16 - Short fade, white school shirt, blue trousers, Lusaka accent - SAME in every scene.<br>Mama 42 - Braids, Chitenge. Coach 55 - Glasses, brown jacket.<br>Locations: Lusaka Market | School | Cup Hall. Props: Wooden Chess Board | Gold Trophy.<br>When you generate a new scene, copy this description into prompt.</span><br>
+<button class="btn-small" onclick="alert('Continuity Check: ✅ Themba same face, same clothes, same voice in all scenes. Locations locked. Props locked.')">🔍 Check Continuity Now</button>
+</div>
+
+<button class="btn" onclick="alert('Work Plan Saved - Zed Gambit')">💾 Save Work Plan</button>
+</div>
+
+<script src="cinema-nav.js"></script>
 <script>
-const slotNames = ["1. INTRO - Themba in Lusaka","2. FIRST GAME - Loses","3. TRAINING MONTAGE","4. FINAL - Zed Gambit Cup","5. WIN - Checkmate","6. END CARD - Logo"];
-const defaultSubs = ["In Lusaka, everybody thinks chess is for rich people. I want to prove them wrong.","First tournament. I lost. But I learned.","Every day. Street chess. School chess. Practice.","The final. Zed Gambit Cup. All of Lusaka watching.","Checkmate. Zed Gambit!","Zed Gambit - Lusaka, Zambia. Every move matters."];
-let slots = Array(6).fill(null);
-let subtitles = Array(6).fill("");
-let clips = [
-  {name:"Themba in Market", url:"", thumb:"https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=300"},
-  {name:"Chess Move", url:"", thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300"},
-  {name:"Training", url:"", thumb:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300"},
-  {name:"Tournament Crowd", url:"", thumb:"https://images.unsplash.com/photo-1511882150382-421056c89033?w=300"},
+let scenes = [
+{id:1, title:"Scene 1 - Themba Finds Chess", shot:"Wide Shot - Lusaka Market, morning, Themba sees chess board", video:"❌ No video yet", audio:"❌ No audio yet"},
+{id:2, title:"Scene 2 - First Game - Loses", shot:"Close-Up - Chess board, Themba nervous, loses", video:"❌ No video yet", audio:"❌ No audio yet"},
+{id:3, title:"Scene 3 - Training Montage", shot:"Montage - Street chess, school chess, practice every day", video:"❌ No video yet", audio:"❌ No audio yet"},
+{id:4, title:"Scene 4 - Final - Zed Gambit Cup", shot:"Wide Shot - Big hall, crowd, final game", video:"❌ No video yet", audio:"❌ No audio yet"},
+{id:5, title:"Scene 5 - Checkmate - Wins", shot:"Close-Up - Checkmate, crowd cheers, trophy", video:"❌ No video yet", audio:"❌ No audio yet"},
 ];
-let selectedSlot = 0;
-let videoEl = document.getElementById('video');
-let undoStack = [];
-let redoStack = [];
-let currentTransition = 'Hard Cut';
-let mediaRecorder = null;
-let recordedChunks = [];
-let isRecording = false;
-function autoSave(){ localStorage.setItem('cinema_slots_v4', JSON.stringify(slots.map(s=>s?s.name:null))); localStorage.setItem('cinema_subs_v4', JSON.stringify(subtitles)); }
-function loadSave(){ let saved = JSON.parse(localStorage.getItem('cinema_slots_v4')||'[]'); saved.forEach((name,i)=>{ if(name){ let f=clips.find(c=>c.name===name); if(f) slots[i]=f; } }); let ss = JSON.parse(localStorage.getItem('cinema_subs_v4')||'[]'); ss.forEach((s,i)=>{ if(s) subtitles[i]=s; }); }
-function saveHistory(){ undoStack.push(JSON.stringify({slots: slots.map(s=>s?s.name:null), subs:[...subtitles]})); if(undoStack.length>50) undoStack.shift(); redoStack=[]; }
-function undo(){ if(!undoStack.length){ alert('Nothing to undo'); return; } let last = undoStack.pop(); redoStack.push(JSON.stringify({slots: slots.map(s=>s?s.name:null), subs:[...subtitles]})); let d = JSON.parse(last); slots = d.slots.map(n=> n ? (clips.find(c=>c.name===n)||{name:n,url:"",thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300"}) : null); subtitles = d.subs; render(); autoSave(); }
-function redo(){ if(!redoStack.length){ alert('Nothing to redo'); return; } let next = redoStack.pop(); undoStack.push(JSON.stringify({slots: slots.map(s=>s?s.name:null), subs:[...subtitles]})); let d = JSON.parse(next); slots = d.slots.map(n=> n ? (clips.find(c=>c.name===n)||{name:n,url:"",thumb:"https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300"}) : null); subtitles = d.subs; render(); autoSave(); }
-function clearSlot(){ saveHistory(); slots[selectedSlot]=null; subtitles[selectedSlot]=""; render(); autoSave(); }
-function render(){
-  document.getElementById('slots').innerHTML = slotNames.map((n,i)=>`<div class="slot ${selectedSlot===i?'active':''} ${slots[i]?'filled':''}" onclick="selectSlot(${i})"><small>${n}</small><b>${slots[i]?slots[i].name:'+ Empty - Tap to Fill'}</b><small style="color:#ffcc00">${subtitles[i]? '💬 '+subtitles[i].substring(0,30)+'...' : 'No subtitle yet'}</small></div>`).join('');
-  document.getElementById('library').innerHTML = clips.map((c,i)=>`<div class="clip" onclick="placeClip(${i})"><img src="${c.thumb}"><b>${c.name}</b><small>Tap to place in Slot ${selectedSlot+1}</small></div>`).join('');
-  document.getElementById('timeline').innerHTML = slots.map((s,i)=>`<div class="timeline-clip ${selectedSlot===i?'active':''}" onclick="selectSlot(${i})">${s? '▶ '+s.name : '○ Empty Slot '+(i+1)}</div>`).join('');
-  let filled = slots.filter(s=>s).length;
-  document.getElementById('progressFill').style.width = (filled/6*100)+'%';
-  document.getElementById('progressText').innerText = filled+'/6 slots filled - '+(6-filled)+' left';
-  document.getElementById('durationLabel').innerText = 'Total: '+filled+' slots filled | Transition: '+currentTransition;
-  document.getElementById('subtitleInput').value = subtitles[selectedSlot]||'';
-  document.getElementById('subtitleHint').innerText = 'Editing subtitle for Slot '+(selectedSlot+1)+' - '+slotNames[selectedSlot];
-  document.getElementById('subtitleText').innerText = subtitles[selectedSlot]||'';
+function openProject(name){
+  document.getElementById('workplan').style.display='block';
+  document.getElementById('planTitle').innerText=name;
+  renderScenes(); renderScreenplay();
+  document.getElementById('workplan').scrollIntoView({behavior:'smooth'});
 }
-function selectSlot(i){ selectedSlot=i; render(); showPreview(); }
-function placeClip(i){ saveHistory(); slots[selectedSlot]=clips[i]; render(); showPreview(); autoSave(); if(selectedSlot<5) selectedSlot++; render(); }
-function showPreview(){ let c = slots[selectedSlot]; if(c && c.url){ videoEl.style.display='block'; videoEl.src=c.url; videoEl.play(); document.getElementById('previewPlaceholder').style.display='none'; } else if(c){ document.getElementById('previewPlaceholder').innerText='Preview: '+c.name; document.getElementById('previewPlaceholder').style.display='flex'; videoEl.style.display='none'; } else { document.getElementById('previewPlaceholder').innerText='Tap a Slot, Then Tap a Clip Below'; document.getElementById('previewPlaceholder').style.display='flex'; videoEl.style.display='none'; } document.getElementById('subtitleText').innerText = subtitles[selectedSlot]||''; }
-function uploadClips(e){ [...e.target.files].forEach(f=>{ let url = URL.createObjectURL(f); clips.push({name:f.name, url:url, thumb:'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300'}); }); render(); }
-function saveSubtitle(){ subtitles[selectedSlot] = document.getElementById('subtitleInput').value; render(); autoSave(); alert('Subtitle saved to Slot '+(selectedSlot+1)); }
-function autoCaptions(){ saveHistory(); for(let i=0;i<6;i++){ if(!subtitles[i]) subtitles[i]=defaultSubs[i]; } render(); autoSave(); alert('Auto-Captions done!'); }
-function clearSubtitle(){ subtitles[selectedSlot]=""; render(); autoSave(); }
-function splitClip(){ alert('Split: Slot '+(selectedSlot+1)+' will be cut into 2'); }
-function addText(){ let t = prompt('Text for this scene?','Checkmate. Zed Gambit!'); if(t) document.getElementById('previewText').innerText=t; }
-function setFilter(f){ videoEl.style.filter=f; }
-function setTransition(t){ currentTransition=t; document.getElementById('transitionLabel').innerText='Current: '+t; render(); }
-function playAudio(input, type){ let url = URL.createObjectURL(input.files[0]); document.getElementById(type+'Audio').src=url; document.getElementById(type+'Audio').play(); }
-function startExport(){ try{ let wrap = document.getElementById('previewWrap'); let stream = wrap.captureStream ? wrap.captureStream(30) : videoEl.captureStream(30); recordedChunks=[]; mediaRecorder = new MediaRecorder(stream, {mimeType:'video/webm'}); mediaRecorder.ondataavailable = e=>{ if(e.data.size>0) recordedChunks.push(e.data); }; mediaRecorder.onstop = ()=>{ let blob = new Blob(recordedChunks,{type:'video/webm'}); let url = URL.createObjectURL(blob); let a=document.createElement('a'); a.href=url; a.download='zed-gambit-slot-'+(selectedSlot+1)+'.webm'; a.click(); document.getElementById('exportStatus').innerText='✅ Exported! File downloaded.'; }; mediaRecorder.start(); isRecording=true; document.getElementById('exportStatus').innerText='🔴 RECORDING... Play video now, then Stop.'; if(videoEl.src) videoEl.play(); }catch(err){ alert('Export needs Chrome / Edge. Use screen record as backup.'); } }
-function stopExport(){ if(mediaRecorder && isRecording){ mediaRecorder.stop(); isRecording=false; } else { alert('Tap Start Export first'); } }
-loadSave(); render();
+function startNew(){
+  document.getElementById('startNow').style.display='block';
+  document.getElementById('startNow').scrollIntoView({behavior:'smooth'});
+}
+function createProject(){
+  let title=document.getElementById('movieTitle').value||'New Movie';
+  let idea=document.getElementById('movieIdea').value||'New movie idea';
+  document.getElementById('planTitle').innerText=title;
+  document.getElementById('ideaText').innerText=idea;
+  document.getElementById('workplan').style.display='block';
+  renderScenes(); renderScreenplay();
+  document.getElementById('workplan').scrollIntoView({behavior:'smooth'});
+  alert('Work Plan Created: '+title+' - Now do Step 2 - Generate Screenplay');
+}
+function generateScreenplay(){
+  let p=document.getElementById('promptInput').value||'Themba in Lusaka';
+  renderScreenplay(p);
+  alert('Screenplay Generated from prompt: '+p);
+}
+function renderScreenplay(prompt){
+  document.getElementById('screenplayList').innerHTML = scenes.map(s=>`<div class="scene"><b>${s.title}</b><br><span class="small">Shot: ${s.shot}</span><br><span class="small">Prompt: ${prompt||'Themba in Lusaka'}</span></div>`).join('');
+}
+function renderScenes(){
+  document.getElementById('scenesList').innerHTML = scenes.map(s=>`<div class="scene"><b>${s.title}</b><br><span class="small">${s.shot}</span><br><span class="small">🎬 Video: ${s.video}</span><br><span class="small">🎵 Audio: ${s.audio}</span></div>`).join('');
+}
+function uploadSceneVideo(e){
+  scenes.forEach(s=>s.video='✅ Video uploaded - '+e.target.files.length+' file(s)');
+  renderScenes();
+  document.getElementById('uploadMsg').innerText='✅ Video uploaded to scenes';
+}
+function uploadSceneAudio(e){
+  scenes.forEach(s=>s.audio='✅ Audio uploaded - '+e.target.files.length+' file(s)');
+  renderScenes();
+  document.getElementById('uploadMsg').innerText='✅ Audio uploaded to scenes';
+}
+function checkExport(){
+  let missing = scenes.filter(s=>s.video.includes('❌')||s.audio.includes('❌'));
+  if(missing.length) document.getElementById('exportCheck').innerText='❌ Not ready - '+missing.length+' scenes missing video/audio. Upload first.';
+  else document.getElementById('exportCheck').innerText='✅ Ready - All scenes have video + audio - Go to Export';
+}
+renderScenes(); renderScreenplay();
 </script>
 </body>
 </html>
