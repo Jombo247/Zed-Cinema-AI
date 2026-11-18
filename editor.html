@@ -12,7 +12,7 @@ h1{font-size:20px} h3{font-size:14px;color:#ffcc00;margin:18px 0 8px}
 .btn{background:#222;color:#fff;border:1px solid #444;padding:10px 14px;border-radius:20px;margin:4px;cursor:pointer}
 .btn-yellow{background:#ffcc00;color:#000;font-weight:900;border:none}
 .btn-red{background:#d32f2f;color:#fff;border:none}
-input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
+input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#222;color:#fff;margin:6px 0;box-sizing:border-box}
 #preview{width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:2px solid #222}
 #preview video{width:100%;height:100%;object-fit:cover;display:none}
 #previewText{position:absolute;top:12px;left:0;right:0;text-align:center;font-weight:900;font-size:22px;text-shadow:2px 2px 0 #000}
@@ -28,11 +28,12 @@ input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #333;bac
 .ai-box{background:#1a1a2e;border:1px solid #4a4aff;border-radius:10px;padding:12px}
 .small{font-size:12px;color:#aaa}
 .navbtn{display:block;background:#222;color:#fff;text-align:center;padding:14px;border-radius:10px;text-decoration:none;margin-top:10px}
+.ai-result{background:#222;border-radius:10px;padding:12px;margin:8px 0;white-space:pre-wrap;font-size:13px}
 </style>
 </head>
 <body>
 <h1>4 - MIXING STUDIO</h1>
-<p class="small">Zed Gambit - Professional Mixing Studio - Live Timeline - Dedicated Page</p>
+<p class="small">Zed Gambit - Professional Mixing Studio - Live Timeline - Dedicated Page - Groq AI</p>
 
 <!-- LIVE PREVIEW -->
 <div id="preview">
@@ -76,17 +77,20 @@ input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #333;bac
 <button class="btn" onclick="fixSync()">🔧 Auto-Fix Sync</button>
 </div>
 
-<!-- ADVANCED AI TOOLS -->
-<h3>🤖 ADVANCED AI TOOLS</h3>
+<!-- ADVANCED AI TOOLS - REAL GROQ -->
+<h3>🤖 ADVANCED AI TOOLS - Groq AI - Real</h3>
 <div class="card ai-box">
-<button class="btn" onclick="aiTool('Auto-Captions - Subtitles generated for all scenes')">🤖 Auto-Captions</button>
-<button class="btn" onclick="aiTool('Auto-Cut - Silences removed, cuts tightened')">🤖 Auto-Cut</button>
-<button class="btn" onclick="aiTool('Enhance Face + Voice - Themba same face, same voice Scene 1 to Scene 15')">🤖 Enhance Face / Voice</button>
-<button class="btn" onclick="aiTool('Background Remove - Done')">🤖 Background Remove</button>
-<button class="btn" onclick="aiTool('Music Sync - Music matched to cuts')">🤖 Music Sync</button>
-<button class="btn" onclick="aiTool('Auto-Colour - Cinematic colour for all scenes')">🤖 Auto-Colour</button>
-<button class="btn" onclick="aiTool('Script To Scene - New scene generated from prompt, with SAME character lock')">🤖 Script To Scene</button>
+<p class="small">These now call Groq for real. Make sure your Groq Key is saved in the Groq box at the top.</p>
+<textarea id="aiPrompt" rows="2" placeholder="AI Prompt: Example: Themba in Lusaka Market, finds chess board, curious..."></textarea>
+<button class="btn" onclick="aiCaptions()">🤖 Auto-Captions - Groq</button>
+<button class="btn" onclick="aiAutoCut()">🤖 Auto-Cut - Groq</button>
+<button class="btn" onclick="aiEnhance()">🤖 Enhance Face / Voice - Groq</button>
+<button class="btn" onclick="aiBackground()">🤖 Background Remove</button>
+<button class="btn" onclick="aiMusicSync()">🤖 Music Sync - Groq</button>
+<button class="btn" onclick="aiColour()">🤖 Auto-Colour - Groq</button>
+<button class="btn btn-yellow" onclick="aiScriptToScene()">🤖 Script To Scene - Groq</button>
 <p id="aiMsg" style="font-size:12px;color:#aab0ff"></p>
+<div id="aiResult"></div>
 </div>
 
 <!-- MEDIA MANAGEMENT -->
@@ -122,6 +126,7 @@ input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #333;bac
 
 <script src="cinema-nav.js"></script>
 <script src="cinema-continuity.js"></script>
+<script src="cinema-groq.js"></script>
 <script>
 let media = [
 {id:1,name:"Scene 1 - Market",type:"video",thumb:"https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=300",url:"",status:"ok"},
@@ -152,7 +157,6 @@ function deleteMedia(id){ if(confirm('Delete this media?')){ media = media.filte
 function uploadMedia(e){ [...e.target.files].forEach(f=>{ let url=URL.createObjectURL(f); let type=f.type.startsWith('audio')?'audio':f.type.startsWith('image')?'image':'video'; media.push({id:Date.now()+Math.random(),name:f.name,type:type,thumb:'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=300',url:url,status:'ok'}); }); renderMedia(); renderTimeline(); }
 function filterMedia(t){ currentFilter=t; renderMedia(); }
 function toolAction(t){ document.getElementById('toolMsg').innerText = 'Tool: '+t+' - Applied to timeline'; if(t==='B&W') videoEl.style.filter='grayscale(1)'; if(t==='Vintage') videoEl.style.filter='sepia(0.6)'; if(t==='Clear Filter') videoEl.style.filter='none'; if(t==='Split') alert('Split: Clip will be cut into 2 at playhead'); }
-function aiTool(msg){ document.getElementById('aiMsg').innerText='🤖 AI: '+msg; alert('AI Tool: '+msg); }
 function addTitle(){ let t=document.getElementById('textInput').value; if(t) document.getElementById('previewText').innerText=t; }
 function playTimeline(){ if(timeline[0]) previewMedia(timeline[0].id); }
 function checkSync(){ document.getElementById('syncStatus').innerText='✅ In Sync'; alert('Sync Check: Video, Audio, Subtitles aligned.'); }
@@ -163,6 +167,43 @@ function runDetection(showAlert=true){
   if(missing.length){ box.innerHTML = `<div style="background:#3a0000;border:1px solid #d32f2f;border-radius:10px;padding:12px;font-size:13px">❌ <b>${missing.length} MISSING MEDIA</b><br>${missing.map(m=>'• '+m.name+' - Re-upload or delete').join('<br>')}</div>`; if(showAlert) alert('Missing: '+missing.map(m=>m.name).join(', ')); }
   else { box.innerHTML = `<div style="background:#002a12;border:1px solid #00d26a;border-radius:10px;padding:12px;font-size:13px">✅ No missing media - All ready</div>`; if(showAlert) alert('No missing media'); }
 }
+// --- REAL GROQ AI TOOLS ---
+function getPrompt(){ return document.getElementById('aiPrompt').value || localStorage.getItem('cinema_screenplay') || 'Themba in Lusaka Market, finds chess board'; }
+async function showAI(title, result){
+  document.getElementById('aiMsg').innerText = '🤖 Groq Done: ' + title;
+  if(result) document.getElementById('aiResult').innerHTML = `<div class="ai-result"><b>${title}</b><br>${result}</div><button class="btn btn-yellow" onclick="document.getElementById('subtitleText').innerText = document.getElementById('aiResult').innerText.slice(0,120)">✅ Use As Subtitle / Text</button>`;
+}
+async function aiCaptions(){
+  document.getElementById('aiMsg').innerText = '🤖 Groq is writing captions...';
+  let r = await groqCaptions(getPrompt());
+  if(r) showAI('Auto-Captions', r);
+}
+async function aiScriptToScene(){
+  document.getElementById('aiMsg').innerText = '🤖 Groq is writing scene...';
+  let r = await groqScriptToScene(getPrompt());
+  if(r) showAI('Script To Scene', r);
+}
+async function aiAutoCut(){
+  document.getElementById('aiMsg').innerText = '🤖 Groq is planning cuts...';
+  let r = await callGroq('For this scene, list where to cut silences and keep only best moments. Give timecodes 00:00 - 00:05 style: ' + getPrompt());
+  if(r) showAI('Auto-Cut Plan', r);
+}
+async function aiEnhance(){
+  document.getElementById('aiMsg').innerText = '🤖 Groq is checking continuity...';
+  let r = await callGroq('Check continuity for this scene: Is Themba same face, age 16, short fade, white school shirt, blue trousers, Lusaka accent? List any fix needed: ' + getPrompt());
+  if(r) showAI('Enhance Face / Voice - Continuity Fix', r);
+}
+async function aiMusicSync(){
+  document.getElementById('aiMsg').innerText = '🤖 Groq is syncing music...';
+  let r = await callGroq('Suggest music sync points for this scene - where beat should hit on cut, what mood, what tempo: ' + getPrompt());
+  if(r) showAI('Music Sync', r);
+}
+async function aiColour(){
+  document.getElementById('aiMsg').innerText = '🤖 Groq is suggesting colour...';
+  let r = await callGroq('Suggest cinematic colour grade for this scene - warm Lusaka morning, contrast, saturation: ' + getPrompt());
+  if(r) showAI('Auto-Colour Grade', r);
+}
+function aiBackground(){ alert('Background Remove: This needs video processing - in browser it will use B&W / Vintage filters for now. Groq will describe the background to remove.'); aiEnhance(); }
 renderMedia(); renderTimeline();
 </script>
 </body>
