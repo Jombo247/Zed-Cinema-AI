@@ -19,7 +19,6 @@ input{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:1px solid #
 <a href="login.html" style="background:#ffcc00;color:#000;padding:10px 14px;border-radius:20px;text-decoration:none;font-weight:bold">Login</a>
 <a href="register.html" style="background:red;color:#fff;padding:10px 14px;border-radius:20px;text-decoration:none;font-weight:bold">Register</a>
 </div>
-
 <h1>🎬 ZED CINEMA AI</h1>
 <h2>Login</h2>
 <div class="card">
@@ -31,13 +30,18 @@ input{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:1px solid #
 </div>
 <script>
 function doLogin(){
-  var e=document.getElementById('email').value;
+  var e=document.getElementById('email').value.trim().toLowerCase();
   var p=document.getElementById('pass').value;
   if(!e || !p){alert('Fill email and password');return;}
+  var users = JSON.parse(localStorage.getItem('zed_users') || '{}');
+  if(!users[e]){alert('No account with this email. Please Register first.'); window.location.href='register.html'; return;}
+  if(users[e].pass !== p){alert('Wrong password for this email. Try again.'); return;}
   localStorage.setItem('zed_user', e);
-  alert('Welcome back! '+e);
+  localStorage.setItem('zed_name', users[e].name);
+  alert('Welcome back! '+users[e].name);
   window.location.href='index.html';
 }
 </script>
+<script src="cinema-nav.js"></script>
 </body>
 </html>
