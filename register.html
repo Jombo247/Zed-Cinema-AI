@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zed AI - Register</title>
+<style>
+body{background:#0a0a0a;color:#fff;font-family:Arial;padding:16px;margin:0}
+.card{background:#1a1a1a;border-radius:12px;padding:16px;margin:12px 0}
+.btn{display:block;background:#ffcc00;color:#000;text-align:center;padding:14px;border-radius:10px;text-decoration:none;font-weight:900;margin-top:10px}
+input{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#111;color:#fff;box-sizing:border-box}
+.small{font-size:12px;color:#aaa}
+</style>
+</head>
+<body>
+<div style="display:flex;justify-content:space-between;gap:8px;position:sticky;top:0;background:#0a0a0a;padding:8px 0">
+<button onclick="history.back()" style="background:#222;color:#fff;padding:10px 14px;border-radius:20px">← Back</button>
+<a href="index.html" style="background:#222;color:#fff;padding:10px 14px;border-radius:20px;text-decoration:none">🏠 Home</a>
+<a href="login.html" style="background:#ffcc00;color:#000;padding:10px 14px;border-radius:20px;text-decoration:none;font-weight:bold">Login</a>
+<a href="register.html" style="background:red;color:#fff;padding:10px 14px;border-radius:20px;text-decoration:none;font-weight:bold">Register</a>
+</div>
+
+<h1>🎬 ZED CINEMA AI</h1>
+<h2>Create Account</h2>
+<div class="card">
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="doReg()" style="width:100%;background:red;color:#fff;padding:14px;border-radius:10px;font-weight:900">Register →</button>
+<p class="small">Already have account? <a href="login.html" style="color:#ffcc00">Login here</a></p>
+<a href="index.html" class="btn" style="background:#222;color:#fff">← Back to Home</a>
+</div>
+<script>
+function doReg(){
+  var n=document.getElementById('name').value;
+  var e=document.getElementById('email').value;
+  var p=document.getElementById('pass').value;
+  if(!n || !e || !p){alert('Fill all boxes');return;}
+  localStorage.setItem('zed_user', e);
+  localStorage.setItem('zed_name', n);
+  alert('Welcome to Zed AI, '+n+'!');
+  window.location.href='index.html';
+}
+</script>
+</body>
+</html>
