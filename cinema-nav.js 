@@ -1,30 +1,39 @@
-// Zed AI - Top Bar Login Check
-document.addEventListener('DOMContentLoaded', function(){
-  var user = localStorage.getItem('zed_user');
-  var name = localStorage.getItem('zed_name') || user;
-  if(!user) return; // not logged in, keep Login/Register
-
-  // Find Login and Register buttons and replace them
-  var links = document.querySelectorAll('a');
-  links.forEach(function(a){
-    if(a.href.includes('login.html')){
-      a.textContent = '👋 ' + name;
-      a.href = 'index.html';
-      a.style.background = '#222';
-      a.style.color = '#ffcc00';
-    }
-    if(a.href.includes('register.html')){
-      a.textContent = 'Logout';
-      a.href = '#';
-      a.style.background = '#333';
-      a.style.color = '#fff';
-      a.onclick = function(e){
-        e.preventDefault();
-        localStorage.removeItem('zed_user');
-        localStorage.removeItem('zed_name');
-        alert('Logged out. See you soon!');
-        window.location.href = 'index.html';
-      };
-    }
-  });
-});
+// Zed AI - Hide Login/Register when logged in
+(function(){
+  function fixTopBar(){
+    var user = localStorage.getItem('zed_user');
+    var name = localStorage.getItem('zed_name') || user;
+    if(!user) return;
+    var links = document.querySelectorAll('a');
+    links.forEach(function(a){
+      var txt = (a.textContent || '').trim().toLowerCase();
+      var href = (a.getAttribute('href') || '').toLowerCase();
+      if(txt === 'login' || href === 'login.html'){
+        a.textContent = '👋 ' + name;
+        a.setAttribute('href','index.html');
+        a.style.background = '#222';
+        a.style.color = '#ffcc00';
+      }
+      if(txt === 'register' || href === 'register.html'){
+        a.textContent = 'Logout';
+        a.setAttribute('href','#');
+        a.style.background = '#333';
+        a.style.color = '#fff';
+        a.onclick = function(e){
+          e.preventDefault();
+          localStorage.removeItem('zed_user');
+          localStorage.removeItem('zed_name');
+          alert('Logged out. See you soon!');
+          window.location.href = 'index.html';
+        };
+      }
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', fixTopBar);
+  } else {
+    fixTopBar();
+  }
+  // run again after 500ms in case page loads slow
+  setTimeout(fixTopBar, 500);
+})();
