@@ -1,19 +1,30 @@
+// Zed AI - Top Bar Login Check
+document.addEventListener('DOMContentLoaded', function(){
+  var user = localStorage.getItem('zed_user');
+  var name = localStorage.getItem('zed_name') || user;
+  if(!user) return; // not logged in, keep Login/Register
 
-// cinema-nav.js - FULL FILE - Delete old, paste this
-// Works with files you already have: index.html + studio.html + admin.html
-
-window.addEventListener('load', () => {
-  let nav = document.createElement('div');
-  nav.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#111;border-top:2px solid #ffcc00;display:flex;justify-content:space-around;padding:14px 0 18px;z-index:9999';
-  nav.innerHTML = `
-    <a href="index.html" style="color:#fff;text-decoration:none;text-align:center;font-size:12px">🏠<br>Home</a>
-    <a href="studio.html" style="color:#fff;text-decoration:none;text-align:center;font-size:12px">🎬<br>Studio</a>
-    <a href="studio.html" style="color:#ffcc00;text-decoration:none;text-align:center;font-size:12px">✂️<br>Edit</a>
-    <a href="index.html" style="color:#fff;text-decoration:none;text-align:center;font-size:12px">👤<br>Profile</a>
-    <a href="#" onclick="history.back();return false;" style="color:#fff;text-decoration:none;text-align:center;font-size:12px">←<br>Back</a>
-  `;
-  document.body.appendChild(nav);
-  document.body.style.paddingBottom = '90px';
+  // Find Login and Register buttons and replace them
+  var links = document.querySelectorAll('a');
+  links.forEach(function(a){
+    if(a.href.includes('login.html')){
+      a.textContent = '👋 ' + name;
+      a.href = 'index.html';
+      a.style.background = '#222';
+      a.style.color = '#ffcc00';
+    }
+    if(a.href.includes('register.html')){
+      a.textContent = 'Logout';
+      a.href = '#';
+      a.style.background = '#333';
+      a.style.color = '#fff';
+      a.onclick = function(e){
+        e.preventDefault();
+        localStorage.removeItem('zed_user');
+        localStorage.removeItem('zed_name');
+        alert('Logged out. See you soon!');
+        window.location.href = 'index.html';
+      };
+    }
+  });
 });
-
-
